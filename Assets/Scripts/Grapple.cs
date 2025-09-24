@@ -1,4 +1,4 @@
-using System.Collections;
+    using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -55,7 +55,7 @@ public class Grapple : MonoBehaviour
         float distance = Vector3.Distance(transform.position, grapplePoint);
 
         // mover al jugador hacia el punto
-        controller.Move(direction * grappleSpeed * Time.deltaTime);
+        controller.Move(grappleSpeed * Time.deltaTime * direction);
 
         // cortar grapple cuando estas cerca
         if (distance < stopDistance)
