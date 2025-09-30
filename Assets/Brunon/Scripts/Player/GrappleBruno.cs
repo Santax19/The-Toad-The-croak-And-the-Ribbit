@@ -8,6 +8,7 @@ public class GrappleBruno : MonoBehaviour
     [SerializeField] private Camera _cam;
     [SerializeField] private LayerMask _grappleMask;
     [SerializeField] private LayerMask _wallMask;
+    [SerializeField] private LayerMask _pickupMask;
 
     [Header("Ajustes del Grapple")]
     [SerializeField] private float _grappleRange = 30f;   // distancia máxima
@@ -67,6 +68,21 @@ public class GrappleBruno : MonoBehaviour
     {
         Ray ray = _cam.ScreenPointToRay(Input.mousePosition);
 
+        // 1. Primero chequeamos pickups
+        if (Physics.Raycast(ray, out RaycastHit hitPickup, _grappleRange, _pickupMask))
+        {
+            if (hitPickup.collider.TryGetComponent<Pickup>(out var pickup))
+            {
+                // Buscar PlayerHealth y MovementController en este jugador
+                var health = GetComponent<PlayerHealth>();
+                var movement = GetComponent<MovementController>();
+
+                pickup.Consume(health, movement);
+                return; // no iniciamos grapple
+            }
+        }
+
+        // 2. Si no es pickup, chequeamos grapple normal
         if (Physics.Raycast(ray, out RaycastHit hit, _grappleRange, _grappleMask))
         {
             _grapplePoint = hit.point;
@@ -78,7 +94,7 @@ public class GrappleBruno : MonoBehaviour
     private void DoGrapple()
     {
         Vector3 dir = (_grapplePoint - transform.position).normalized;
-        float dist = Vector3.Distance(transform.position, _grapplePoint);
+        _ = Vector3.Distance(transform.position, _grapplePoint);
 
         _rb.velocity = dir * _pullSpeed;
     }
