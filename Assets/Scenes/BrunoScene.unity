@@ -1146,7 +1146,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b8e7a2b530b318e4aa7d2168912d1a08, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _healthBar: {fileID: 0}
+  _healthBar: {fileID: 1879563316}
   _crosshair: {fileID: 188688468}
 --- !u!1 &969618975
 GameObject:
@@ -1472,6 +1472,7 @@ GameObject:
   - component: {fileID: 1495737752}
   - component: {fileID: 1495737750}
   - component: {fileID: 1495737756}
+  - component: {fileID: 1495737759}
   - component: {fileID: 1495737749}
   - component: {fileID: 1495737755}
   - component: {fileID: 1495737757}
@@ -1500,7 +1501,7 @@ MonoBehaviour:
   _minForce: 2
   _verticalBoost: 2
   _jumpCooldown: 0.3
-  _cameraDropAmount: 1.05
+  _cameraDropAmount: 0.78
   _cameraLerpSpeed: 5
   _chargeCurve:
     serializedVersion: 2
@@ -1677,8 +1678,8 @@ MonoBehaviour:
   _wallMask:
     serializedVersion: 2
     m_Bits: 1024
-  _grappleRange: 30
-  _pullSpeed: 20
+  _grappleRange: 15
+  _pullSpeed: 15
   _wallCheckDistance: 0.75
   _grappleCooldown: 1
   _wallBoxSize: {x: 0.8, y: 1, z: 0.1}
@@ -1695,6 +1696,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _maxHealth: 100
+--- !u!114 &1495737759
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1495737748}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ea38d273b8f347b4585769f14e616cd7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _hudController: {fileID: 941340896}
+  _playerHealth: {fileID: 1495737758}
 --- !u!1 &1602282761
 GameObject:
   m_ObjectHideFlags: 0
@@ -2636,6 +2651,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: StickyTrap
       objectReference: {fileID: 0}
+    - target: {fileID: 5878746591651878683, guid: 43533ba0e7239294097822789de6185a, type: 3}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
+    - target: {fileID: 7398896758622713992, guid: 43533ba0e7239294097822789de6185a, type: 3}
+      propertyPath: m_IsTrigger
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -2692,6 +2715,14 @@ PrefabInstance:
     - target: {fileID: 7302046361132695864, guid: 7f78536d26869cd45bcdcc6fe29a40cf, type: 3}
       propertyPath: m_Name
       value: PoisonTrap
+      objectReference: {fileID: 0}
+    - target: {fileID: 7302046361132695864, guid: 7f78536d26869cd45bcdcc6fe29a40cf, type: 3}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
+    - target: {fileID: 8682779502372616164, guid: 7f78536d26869cd45bcdcc6fe29a40cf, type: 3}
+      propertyPath: m_IsTrigger
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -2759,6 +2790,14 @@ PrefabInstance:
     - target: {fileID: 2775325460965619225, guid: 12a0c412b0b03d54295fc22b34b965e5, type: 3}
       propertyPath: m_Name
       value: DamageTrap
+      objectReference: {fileID: 0}
+    - target: {fileID: 2775325460965619225, guid: 12a0c412b0b03d54295fc22b34b965e5, type: 3}
+      propertyPath: m_TagString
+      value: Ground
+      objectReference: {fileID: 0}
+    - target: {fileID: 5623591929309584708, guid: 12a0c412b0b03d54295fc22b34b965e5, type: 3}
+      propertyPath: m_IsTrigger
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

@@ -17,8 +17,7 @@ public class DOTTrap : Trap
 
     protected override void OnExitTrap(PlayerHealth health, GameObject player)
     {
-        if (_damageCoroutine != null) StopCoroutine(_damageCoroutine);
-        _damageCoroutine = StartCoroutine(ApplyDamageOverTime(health)); // continúa hasta que termine
+        // dejar que la corutina continúe sola
     }
 
     private IEnumerator ApplyDamageOverTime(PlayerHealth health)

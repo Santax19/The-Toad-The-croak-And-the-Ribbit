@@ -18,7 +18,6 @@ public class PlayerHudController : MonoBehaviour
 
         UpdateHealthBar(_healthSystem.CurrentHealth, _healthSystem.MaxHealth);
     }
-
     private void UpdateHealthBar(int current, int max)
     {
         if (_healthBar != null)
