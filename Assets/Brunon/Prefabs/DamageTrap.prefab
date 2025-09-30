@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 4262930238402506294}
   - component: {fileID: 5623591929309584708}
   - component: {fileID: 2022664679171230860}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: DamageTrap
   m_TagString: Ground
   m_Icon: {fileID: 0}
@@ -100,7 +100,7 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3

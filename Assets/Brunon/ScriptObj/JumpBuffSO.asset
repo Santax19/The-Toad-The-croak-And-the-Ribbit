@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   buffName: JumpCricket
   pickupColor: {r: 0, g: 0, b: 0, a: 0}
-  duration: 0
+  duration: 7
   jumpMultiplier: 1.5

@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 6177275082403619001}
   - component: {fileID: 8682779502372616164}
   - component: {fileID: 254648618048498914}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: PoisonTrap
   m_TagString: Ground
   m_Icon: {fileID: 0}
@@ -100,7 +100,7 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
