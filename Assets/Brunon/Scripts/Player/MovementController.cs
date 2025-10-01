@@ -26,6 +26,9 @@ public class MovementController : MonoBehaviour
     [SerializeField] private GameObject bulletPrefab;
     [SerializeField] private float bulletSpeed = 50f;
     [SerializeField] private float maxShootDistance = 100f;
+    [SerializeField] private float fireRate = 0.25f;
+
+    private float _nextShootTime = 0f;
 
     private Rigidbody _rb;
     private Camera _playerCam;
@@ -179,9 +182,10 @@ public class MovementController : MonoBehaviour
 
     private void HandleShooting()
     {
-        if (Input.GetButtonDown("Fire1")) 
+        if (Input.GetButtonDown("Fire1") && Time.time >= _nextShootTime) 
         {
             Shoot();
+            _nextShootTime = Time.time + fireRate;
         }
     }
 
