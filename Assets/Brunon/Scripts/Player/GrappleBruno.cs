@@ -34,7 +34,7 @@ public class GrappleBruno : MonoBehaviour
     private void Update()
     {
         // inicio grapple (click derecho) con cooldown
-        if (Input.GetMouseButtonDown(1) && Time.time >= _lastGrappleTime + _grappleCooldown)
+        if (Input.GetKeyDown(KeyCode.Space) && Time.time >= _lastGrappleTime + _grappleCooldown)
             TryStartGrapple();
 
         // cancelar manualmente

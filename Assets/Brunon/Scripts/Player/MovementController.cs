@@ -21,6 +21,12 @@ public class MovementController : MonoBehaviour
     [SerializeField] private float _crouchSpeed = 3f; // velocidad lenta
     [SerializeField] private float _moveSmooth = 8f;
 
+    [Header("Shooting Settings")]
+    [SerializeField] private Transform firePoint; // Empty en la punta del arma o manos
+    [SerializeField] private GameObject bulletPrefab;
+    [SerializeField] private float bulletSpeed = 50f;
+    [SerializeField] private float maxShootDistance = 100f;
+
     private Rigidbody _rb;
     private Camera _playerCam;
     private FloorDetector _floorDetector;
@@ -57,6 +63,7 @@ public class MovementController : MonoBehaviour
     {
         HandleInput();
         HandleCameraChargeEffect();
+        HandleShooting();
     }
 
     private void HandleInput()
@@ -169,6 +176,48 @@ public class MovementController : MonoBehaviour
         _chargeTimer = 0f;
         _lastInputDir = Vector3.zero;
     }
+
+    private void HandleShooting()
+    {
+        if (Input.GetButtonDown("Fire1")) 
+        {
+            Shoot();
+        }
+    }
+
+    private void Shoot()
+    {
+        if (bulletPrefab == null || firePoint == null) return;
+
+        
+        Ray ray = _playerCam.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
+        Vector3 targetPoint;
+
+        if (Physics.Raycast(ray, out RaycastHit hit, maxShootDistance))
+        {
+            targetPoint = hit.point;
+        }
+        else
+        {
+            targetPoint = ray.GetPoint(maxShootDistance);
+        }
+
+        
+        Vector3 direction = (targetPoint - firePoint.position).normalized;
+
+        
+        GameObject bullet = Instantiate(bulletPrefab, firePoint.position, Quaternion.LookRotation(direction));
+
+        // velocidad de la bala
+        Rigidbody rb = bullet.GetComponent<Rigidbody>();
+        if (rb != null)
+        {
+            rb.velocity = direction * bulletSpeed;
+        }
+    }
+
+
+
     public void ModifyMovement(float crouchMultiplier, float jumpMultiplier)
     {
         _crouchSpeed = _baseCrouchSpeed * crouchMultiplier;
