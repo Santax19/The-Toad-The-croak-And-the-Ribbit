@@ -1,10 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Fusion;
+using Fusion.Addons.Physics;
 
-[RequireComponent(typeof(Rigidbody))]
+[RequireComponent(typeof(NetworkRigidbody3D))]
 
-public class MovementController : MonoBehaviour
+public class MovementController : NetworkBehaviour
 {
     [Header("Jump Settings")]
     [SerializeField] private float _maxChargeTime = 2f;
@@ -30,8 +32,8 @@ public class MovementController : MonoBehaviour
 
     private float _nextShootTime = 0f;
 
-    private Rigidbody _rb;
-    private Camera _playerCam;
+    private NetworkRigidbody3D _nrb;
+    public Camera _playerCam;
     private FloorDetector _floorDetector;
     private GrappleBruno _grapple;
 
@@ -46,21 +48,40 @@ public class MovementController : MonoBehaviour
 
     private float _lastJumpTime;
 
-    private void Start()
+    public override void Spawned()
     {
-        if (_headTransform != null)
-            _headDefaultLocalPos = _headTransform.localPosition;
-    }
-
-    private void Awake()
-    {
-        _rb = GetComponent<Rigidbody>();
-        _grapple = GetComponent<GrappleBruno>();
+        _nrb = GetComponent<NetworkRigidbody3D>();
         _playerCam = GetComponentInChildren<Camera>();
+        _grapple = GetComponent<GrappleBruno>();
         _floorDetector = GetComponentInChildren<FloorDetector>();
         _baseCrouchSpeed = _crouchSpeed;
         _baseMaxForce = _maxForce;
+
+        // Activar cámara solo para el jugador local
+        if (Object.HasInputAuthority)
+        {
+            if (_headTransform != null)
+                _headDefaultLocalPos = _headTransform.localPosition;
+
+            _playerCam.gameObject.SetActive(true);
+        }
+        else
+        {
+            _playerCam.gameObject.SetActive(false);
+        }
     }
+
+    public override void FixedUpdateNetwork()
+    {
+        if (!Object.HasInputAuthority)
+            return;
+
+        HandleInput();
+        HandleCameraChargeEffect();
+        HandleShooting();
+    }
+
+   
 
     private void Update()
     {
@@ -102,9 +123,9 @@ public class MovementController : MonoBehaviour
 
             // movimiento lento
             Vector3 targetVelocity = moveDir * _crouchSpeed;
-            Vector3 velocity = Vector3.Lerp(new Vector3(_rb.velocity.x, 0, _rb.velocity.z), targetVelocity, Time.deltaTime * _moveSmooth);
+            Vector3 velocity = Vector3.Lerp(new Vector3(_nrb.Rigidbody.velocity.x, 0, _nrb.Rigidbody.velocity.z), targetVelocity, Time.deltaTime * _moveSmooth);
 
-            _rb.velocity = new Vector3(velocity.x, _rb.velocity.y, velocity.z);
+            _nrb.Rigidbody.velocity = new Vector3(velocity.x, _nrb.Rigidbody.velocity.y, velocity.z);
         }
         else
         {
@@ -173,7 +194,7 @@ public class MovementController : MonoBehaviour
             jumpDir = Vector3.zero;
 
         // aplicar fuerza
-        _rb.AddForce(jumpDir + Vector3.up * verticalForce, ForceMode.Impulse);
+        _nrb.Rigidbody.AddForce(jumpDir + Vector3.up * verticalForce, ForceMode.Impulse);
 
         // reset
         _chargeTimer = 0f;
@@ -191,33 +212,28 @@ public class MovementController : MonoBehaviour
 
     private void Shoot()
     {
-        if (bulletPrefab == null || firePoint == null) return;
+        if (!Object.HasInputAuthority) return;
+        if (bulletPrefab.Equals(default) || firePoint == null) return;
 
-        
         Ray ray = _playerCam.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
-        Vector3 targetPoint;
+        Vector3 targetPoint = Physics.Raycast(ray, out RaycastHit hit, maxShootDistance)
+            ? hit.point
+            : ray.GetPoint(maxShootDistance);
 
-        if (Physics.Raycast(ray, out RaycastHit hit, maxShootDistance))
-        {
-            targetPoint = hit.point;
-        }
-        else
-        {
-            targetPoint = ray.GetPoint(maxShootDistance);
-        }
-
-        
         Vector3 direction = (targetPoint - firePoint.position).normalized;
 
-        
-        GameObject bullet = Instantiate(bulletPrefab, firePoint.position, Quaternion.LookRotation(direction));
-
-        // velocidad de la bala
-        Rigidbody rb = bullet.GetComponent<Rigidbody>();
-        if (rb != null)
-        {
-            rb.velocity = direction * bulletSpeed;
-        }
+        Runner.Spawn(
+            bulletPrefab,
+            firePoint.position,
+            Quaternion.LookRotation(direction),
+            Object.InputAuthority,
+            (runner, obj) =>
+            {
+                if (obj.TryGetComponent(out Rigidbody rb))
+                {
+                    rb.velocity = direction * bulletSpeed;
+                }
+            });
     }
 
 

@@ -1,16 +1,30 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Fusion;
 
-public class Bullet : MonoBehaviour
+public class Bullet : NetworkBehaviour
 {
-    public float lifeTime = 5f; // tiempo antes de destruirse sola
-    public int damage = 10;     // daño que hace la bala
+    [SerializeField] private float lifeTime = 5f;
+    [SerializeField] private int damage = 10;
+    [SerializeField] private float speed = 50f;
 
-    private void Start()
+    private Rigidbody _rb;
+
+    public override void Spawned()
     {
-        Destroy(gameObject, lifeTime); // la bala se destruye sola después de un tiempo
+        _rb = GetComponent<Rigidbody>();
+
+        // destrucción automática en red
+        Runner.Despawn(Object);
     }
+
+    public void Initialize(Vector3 direction, float speed)
+    {
+        _rb = GetComponent<Rigidbody>();
+        _rb.velocity = direction * speed;
+    }
+
 
     private void OnCollisionEnter(Collision collision)
     {
@@ -21,8 +35,10 @@ public class Bullet : MonoBehaviour
             enemy.TakeDamage(damage);
         }
 
-        // Destruimos la bala al chocar con cualquier cosa
-        Destroy(gameObject);
+        if(Object!= null && Object.IsValid)
+        {
+            Runner.Despawn(Object);
+        }
     }
 }
 
