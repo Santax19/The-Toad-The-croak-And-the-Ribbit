@@ -1,12 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Fusion;
-using Fusion.Addons.Physics;
 
-[RequireComponent(typeof(NetworkRigidbody3D))]
+[RequireComponent(typeof(Rigidbody))]
 
-public class MovementController : NetworkBehaviour
+public class MovementController : MonoBehaviour
 {
     [Header("Jump Settings")]
     [SerializeField] private float _maxChargeTime = 2f;
@@ -23,17 +21,8 @@ public class MovementController : NetworkBehaviour
     [SerializeField] private float _crouchSpeed = 3f; // velocidad lenta
     [SerializeField] private float _moveSmooth = 8f;
 
-    [Header("Shooting Settings")]
-    [SerializeField] private Transform firePoint; // Empty en la punta del arma o manos
-    [SerializeField] private GameObject bulletPrefab;
-    [SerializeField] private float bulletSpeed = 50f;
-    [SerializeField] private float maxShootDistance = 100f;
-    [SerializeField] private float fireRate = 0.25f;
-
-    private float _nextShootTime = 0f;
-
-    private NetworkRigidbody3D _nrb;
-    public Camera _playerCam;
+    private Rigidbody _rb;
+    private Camera _playerCam;
     private FloorDetector _floorDetector;
     private GrappleBruno _grapple;
 
@@ -48,46 +37,26 @@ public class MovementController : NetworkBehaviour
 
     private float _lastJumpTime;
 
-    public override void Spawned()
+    private void Start()
     {
-        _nrb = GetComponent<NetworkRigidbody3D>();
-        _playerCam = GetComponentInChildren<Camera>();
+        if (_headTransform != null)
+            _headDefaultLocalPos = _headTransform.localPosition;
+    }
+
+    private void Awake()
+    {
+        _rb = GetComponent<Rigidbody>();
         _grapple = GetComponent<GrappleBruno>();
+        _playerCam = GetComponentInChildren<Camera>();
         _floorDetector = GetComponentInChildren<FloorDetector>();
         _baseCrouchSpeed = _crouchSpeed;
         _baseMaxForce = _maxForce;
-
-        // Activar cámara solo para el jugador local
-        if (Object.HasInputAuthority)
-        {
-            if (_headTransform != null)
-                _headDefaultLocalPos = _headTransform.localPosition;
-
-            _playerCam.gameObject.SetActive(true);
-        }
-        else
-        {
-            _playerCam.gameObject.SetActive(false);
-        }
     }
-
-    public override void FixedUpdateNetwork()
-    {
-        if (!Object.HasInputAuthority)
-            return;
-
-        HandleInput();
-        HandleCameraChargeEffect();
-        HandleShooting();
-    }
-
-   
 
     private void Update()
     {
         HandleInput();
         HandleCameraChargeEffect();
-        HandleShooting();
     }
 
     private void HandleInput()
@@ -123,9 +92,9 @@ public class MovementController : NetworkBehaviour
 
             // movimiento lento
             Vector3 targetVelocity = moveDir * _crouchSpeed;
-            Vector3 velocity = Vector3.Lerp(new Vector3(_nrb.Rigidbody.velocity.x, 0, _nrb.Rigidbody.velocity.z), targetVelocity, Time.deltaTime * _moveSmooth);
+            Vector3 velocity = Vector3.Lerp(new Vector3(_rb.velocity.x, 0, _rb.velocity.z), targetVelocity, Time.deltaTime * _moveSmooth);
 
-            _nrb.Rigidbody.velocity = new Vector3(velocity.x, _nrb.Rigidbody.velocity.y, velocity.z);
+            _rb.velocity = new Vector3(velocity.x, _rb.velocity.y, velocity.z);
         }
         else
         {
@@ -194,46 +163,11 @@ public class MovementController : NetworkBehaviour
             jumpDir = Vector3.zero;
 
         // aplicar fuerza
-        _nrb.Rigidbody.AddForce(jumpDir + Vector3.up * verticalForce, ForceMode.Impulse);
+        _rb.AddForce(jumpDir + Vector3.up * verticalForce, ForceMode.Impulse);
 
         // reset
         _chargeTimer = 0f;
         _lastInputDir = Vector3.zero;
-    }
-
-    private void HandleShooting()
-    {
-        if (Input.GetButtonDown("Fire1") && Time.time >= _nextShootTime) 
-        {
-            Shoot();
-            _nextShootTime = Time.time + fireRate;
-        }
-    }
-
-    private void Shoot()
-    {
-        if (!Object.HasInputAuthority) return;
-        if (bulletPrefab.Equals(default) || firePoint == null) return;
-
-        Ray ray = _playerCam.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
-        Vector3 targetPoint = Physics.Raycast(ray, out RaycastHit hit, maxShootDistance)
-            ? hit.point
-            : ray.GetPoint(maxShootDistance);
-
-        Vector3 direction = (targetPoint - firePoint.position).normalized;
-
-        Runner.Spawn(
-            bulletPrefab,
-            firePoint.position,
-            Quaternion.LookRotation(direction),
-            Object.InputAuthority,
-            (runner, obj) =>
-            {
-                if (obj.TryGetComponent(out Rigidbody rb))
-                {
-                    rb.velocity = direction * bulletSpeed;
-                }
-            });
     }
 
 

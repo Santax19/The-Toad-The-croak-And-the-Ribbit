@@ -38,7 +38,7 @@ public class GrappleBruno : MonoBehaviour
             TryStartGrapple();
 
         // cancelar manualmente
-        if (Input.GetMouseButtonUp(1) && _isGrappling)
+        if (Input.GetKeyUp(KeyCode.Space) && _isGrappling)
             StopGrappling();
     }
 
