@@ -21,15 +21,6 @@ public class MovementController : MonoBehaviour
     [SerializeField] private float _crouchSpeed = 3f; // velocidad lenta
     [SerializeField] private float _moveSmooth = 8f;
 
-    [Header("Shooting Settings")]
-    [SerializeField] private Transform firePoint; // Empty en la punta del arma o manos
-    [SerializeField] private GameObject bulletPrefab;
-    [SerializeField] private float bulletSpeed = 50f;
-    [SerializeField] private float maxShootDistance = 100f;
-    [SerializeField] private float fireRate = 0.25f;
-
-    private float _nextShootTime = 0f;
-
     private Rigidbody _rb;
     private Camera _playerCam;
     private FloorDetector _floorDetector;
@@ -66,7 +57,6 @@ public class MovementController : MonoBehaviour
     {
         HandleInput();
         HandleCameraChargeEffect();
-        HandleShooting();
     }
 
     private void HandleInput()
@@ -178,46 +168,6 @@ public class MovementController : MonoBehaviour
         // reset
         _chargeTimer = 0f;
         _lastInputDir = Vector3.zero;
-    }
-
-    private void HandleShooting()
-    {
-        if (Input.GetButtonDown("Fire1") && Time.time >= _nextShootTime) 
-        {
-            Shoot();
-            _nextShootTime = Time.time + fireRate;
-        }
-    }
-
-    private void Shoot()
-    {
-        if (bulletPrefab == null || firePoint == null) return;
-
-        
-        Ray ray = _playerCam.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
-        Vector3 targetPoint;
-
-        if (Physics.Raycast(ray, out RaycastHit hit, maxShootDistance))
-        {
-            targetPoint = hit.point;
-        }
-        else
-        {
-            targetPoint = ray.GetPoint(maxShootDistance);
-        }
-
-        
-        Vector3 direction = (targetPoint - firePoint.position).normalized;
-
-        
-        GameObject bullet = Instantiate(bulletPrefab, firePoint.position, Quaternion.LookRotation(direction));
-
-        // velocidad de la bala
-        Rigidbody rb = bullet.GetComponent<Rigidbody>();
-        if (rb != null)
-        {
-            rb.velocity = direction * bulletSpeed;
-        }
     }
 
 

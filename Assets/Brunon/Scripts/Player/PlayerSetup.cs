@@ -13,6 +13,7 @@ public class PlayerSetup : MonoBehaviour
         if (_hudController != null && _playerHealth != null)
         {
             _hudController.Init(_playerHealth);
+            _hudController.InitWeaponHud(GetComponent<WeaponManager>());
         }
         else
         {
