@@ -1,5 +1,13 @@
 fileFormatVersion: 2
+<<<<<<< Updated upstream:Assets/Images/Fragmento.png.meta
+<<<<<<<< Updated upstream:Assets/Images/Fragmento.png.meta
 guid: 3e7f8c2f8bfe3da4d98d83207d2b6ccc
+========
+guid: 2caf7c467d2775440bc348eb038b6671
+>>>>>>>> Stashed changes:Assets/Images/2025_10_20_0qa_Kleki.png.meta
+=======
+guid: 3e7f8c2f8bfe3da4d98d83207d2b6ccc
+>>>>>>> Stashed changes:Assets/Brunon/Images/Fragmento.png.meta
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
