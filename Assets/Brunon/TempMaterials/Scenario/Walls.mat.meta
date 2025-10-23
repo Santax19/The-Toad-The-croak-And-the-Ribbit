@@ -1,9 +1,13 @@
 fileFormatVersion: 2
+<<<<<<< Updated upstream
 <<<<<<<< Updated upstream:Assets/Postpro/Slow.mat.meta
 guid: a997104eec33aa1428175ef1e7e1bb54
 ========
 guid: 8550397513dbc1648863587c975d163c
 >>>>>>>> Stashed changes:Assets/Brunon/TempMaterials/Scenario/Walls.mat.meta
+=======
+guid: 8550397513dbc1648863587c975d163c
+>>>>>>> Stashed changes
 NativeFormatImporter:
   externalObjects: {}
   mainObjectFileID: 2100000

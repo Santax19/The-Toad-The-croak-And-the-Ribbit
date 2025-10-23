@@ -1,9 +1,13 @@
 fileFormatVersion: 2
+<<<<<<< Updated upstream
 <<<<<<<< Updated upstream:Assets/Settings.meta
 guid: 6fee5657f06a07a4a9ee808d2a8102d7
 ========
 guid: 1b6a134425b6ea34e919990838231bb2
 >>>>>>>> Stashed changes:Assets/Brunon/Shaders.meta
+=======
+guid: 6fee5657f06a07a4a9ee808d2a8102d7
+>>>>>>> Stashed changes
 folderAsset: yes
 DefaultImporter:
   externalObjects: {}

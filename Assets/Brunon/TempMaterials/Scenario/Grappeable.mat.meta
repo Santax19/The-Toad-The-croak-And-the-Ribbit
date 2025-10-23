@@ -1,9 +1,13 @@
 fileFormatVersion: 2
+<<<<<<< Updated upstream
 <<<<<<<< Updated upstream:Assets/Postpro/Damage.mat.meta
 guid: c995a7f4805608e4dbfb0c9c4b78fe80
 ========
 guid: 88811718b6f0a9940afe6ebe8924d4f2
 >>>>>>>> Stashed changes:Assets/Brunon/TempMaterials/Scenario/Grappeable.mat.meta
+=======
+guid: 88811718b6f0a9940afe6ebe8924d4f2
+>>>>>>> Stashed changes
 NativeFormatImporter:
   externalObjects: {}
   mainObjectFileID: 2100000

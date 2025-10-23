@@ -1,5 +1,9 @@
 fileFormatVersion: 2
+<<<<<<<< Updated upstream:Assets/Brunon/Particles/Smoke.mat.meta
 guid: ec612aeaa5a6cef4f8394929f1186aa2
+========
+guid: a8a58a3ca1acdeb4cb6081fd37a41ccd
+>>>>>>>> Stashed changes:Assets/Brunon/Particles/Smoke 1.mat.meta
 NativeFormatImporter:
   externalObjects: {}
   mainObjectFileID: 2100000

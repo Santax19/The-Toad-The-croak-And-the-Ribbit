@@ -1,5 +1,9 @@
 fileFormatVersion: 2
+<<<<<<<< Updated upstream:Assets/Brunon/Particles/Fragmento1.mat.meta
 guid: 1c3c7f5c4616dff41b33fb69823e3b98
+========
+guid: 61a38ca0fb9a87d4683d9f539ac4605b
+>>>>>>>> Stashed changes:Assets/Brunon/Particles/Fragmento2.mat.meta
 NativeFormatImporter:
   externalObjects: {}
   mainObjectFileID: 2100000

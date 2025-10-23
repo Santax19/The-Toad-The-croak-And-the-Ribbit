@@ -1,9 +1,13 @@
 fileFormatVersion: 2
+<<<<<<< Updated upstream
 <<<<<<<< Updated upstream:Assets/Particles/Fragmento1.mat.meta
 guid: 98ef92c7b86e4cb4694434aef3f40ac1
 ========
 guid: 3eea1d0c0206ba244b881e7b8f37df01
 >>>>>>>> Stashed changes:Assets/Brunon/TempMaterials/Scenario/PlayerDummy.mat.meta
+=======
+guid: 3eea1d0c0206ba244b881e7b8f37df01
+>>>>>>> Stashed changes
 NativeFormatImporter:
   externalObjects: {}
   mainObjectFileID: 2100000

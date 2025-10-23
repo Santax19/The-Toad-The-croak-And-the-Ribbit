@@ -1,5 +1,9 @@
 fileFormatVersion: 2
+<<<<<<<< Updated upstream:Assets/Images.meta
 guid: 469f3d09891b6514b844574837d9d488
+========
+guid: 55c63a6bef5b82245bda7225150cdf95
+>>>>>>>> Stashed changes:Assets/Brunon/Scripts/VFX.meta
 folderAsset: yes
 DefaultImporter:
   externalObjects: {}

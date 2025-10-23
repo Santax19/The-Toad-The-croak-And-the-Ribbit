@@ -1,6 +1,11 @@
 fileFormatVersion: 2
+<<<<<<< Updated upstream
 <<<<<<<< Updated upstream:Assets/Settings.meta
 guid: f14e38ca9d647ab4fb4169a54a243e4d
+=======
+<<<<<<<< Updated upstream:Assets/Particles.meta
+guid: e2f42144ee8d9ca4cb1c2e39ea93fa19
+>>>>>>> Stashed changes
 ========
 guid: 1b6a134425b6ea34e919990838231bb2
 >>>>>>>> Stashed changes:Assets/Brunon/Shaders.meta

@@ -1,9 +1,13 @@
 fileFormatVersion: 2
+<<<<<<< Updated upstream
 <<<<<<<< Updated upstream:Assets/Scenes/BrunoScene.meta
 guid: 7885ab49e6bbe17499e3c1cb7930fefb
 ========
 guid: 55c63a6bef5b82245bda7225150cdf95
 >>>>>>>> Stashed changes:Assets/Brunon/Scripts/VFX.meta
+=======
+guid: 7885ab49e6bbe17499e3c1cb7930fefb
+>>>>>>> Stashed changes
 folderAsset: yes
 DefaultImporter:
   externalObjects: {}

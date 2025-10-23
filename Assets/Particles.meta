@@ -1,5 +1,9 @@
 fileFormatVersion: 2
+<<<<<<<< Updated upstream:Assets/Particles.meta
 guid: e2f42144ee8d9ca4cb1c2e39ea93fa19
+========
+guid: 1b6a134425b6ea34e919990838231bb2
+>>>>>>>> Stashed changes:Assets/Brunon/Shaders.meta
 folderAsset: yes
 DefaultImporter:
   externalObjects: {}
