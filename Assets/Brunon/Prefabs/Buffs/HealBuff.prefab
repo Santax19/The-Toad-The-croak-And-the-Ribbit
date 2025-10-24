@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 5195824495446417126}
   - component: {fileID: 7126274805442869481}
   - component: {fileID: 1422703141998809230}
+  - component: {fileID: 1436272762024120435}
   m_Layer: 11
   m_Name: HealBuff
   m_TagString: Untagged
@@ -63,7 +64,7 @@ MeshRenderer:
   m_RenderingLayerMask: 257
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: bcdc87c0ff9d37a45a58366ed7155389, type: 2}
+  - {fileID: 2100000, guid: dbba07a1562c6614192c5414b23a0b7e, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -119,3 +120,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _buff: {fileID: 11400000, guid: cabd9b4dd2fbba0439bdf8101e2f3d8d, type: 2}
+--- !u!114 &1436272762024120435
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3203646612878939898}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b2fef1993663b9242b06d348f9a47c14, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  outlineMat: {fileID: 2100000, guid: 0c4679cea533f1a48bbe1df2991a07a7, type: 2}

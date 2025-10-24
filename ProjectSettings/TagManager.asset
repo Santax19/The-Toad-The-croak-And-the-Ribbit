@@ -5,8 +5,12 @@ TagManager:
   serializedVersion: 2
   tags:
   - CinemachineTarget
+<<<<<<< Updated upstream
+=======
   - Ground
   - GrappleableObject
+  - Tongue
+>>>>>>> Stashed changes
   layers:
   - Default
   - TransparentFX
@@ -15,11 +19,11 @@ TagManager:
   - Water
   - UI
   - 
-  - Floor
+  - 
   - PostProcessing
   - Not in Reflection
-  - GrappleableObject
-  - PickUp
+  - 
+  - 
   - 
   - 
   - 

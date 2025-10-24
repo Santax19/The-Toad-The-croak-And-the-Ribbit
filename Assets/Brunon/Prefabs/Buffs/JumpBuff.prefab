@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 8840489106151330596}
   - component: {fileID: 1095831983467989125}
   - component: {fileID: 1378879631039532191}
+  - component: {fileID: 2295929007420700980}
   m_Layer: 11
   m_Name: JumpBuff
   m_TagString: Untagged
@@ -63,7 +64,7 @@ MeshRenderer:
   m_RenderingLayerMask: 257
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 70e180549a8d8404eb12ba8f68247aa9, type: 2}
+  - {fileID: 2100000, guid: c0ed1638f6f60684f8820ec7d3d81150, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -119,3 +120,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _buff: {fileID: 11400000, guid: 9c6cbb4923a17814182cc357210f540d, type: 2}
+--- !u!114 &2295929007420700980
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3489056847564031895}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b2fef1993663b9242b06d348f9a47c14, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  outlineMat: {fileID: 2100000, guid: 0c4679cea533f1a48bbe1df2991a07a7, type: 2}

@@ -11,6 +11,8 @@ public class StickyTrap : Trap
         if (player.TryGetComponent<MovementController>(out var movement))
         {
             movement.ModifyMovement(_multiplier, _multiplier);
+            if (FindObjectOfType<FullScreenFXMan>() is FullScreenFXMan fx)
+                fx.ApplySlowEffect(true);
         }
     }
 
@@ -19,6 +21,8 @@ public class StickyTrap : Trap
         if (player.TryGetComponent<MovementController>(out var movement))
         {
             movement.ResetMovement();
+            if (FindObjectOfType<FullScreenFXMan>() is FullScreenFXMan fx)
+                fx.ApplySlowEffect(false);
         }
     }
 }
