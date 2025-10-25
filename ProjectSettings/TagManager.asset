@@ -4,9 +4,10 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - CinemachineTarget
-  - Ground
   - GrappleableObject
+  - Ground
+  - Tongue
+  - CinemachineTarget
   layers:
   - Default
   - TransparentFX
@@ -14,12 +15,12 @@ TagManager:
   - 
   - Water
   - UI
+  - Grappeable
+  - Walls
+  - PickUps
   - 
-  - Floor
-  - PostProcessing
-  - Not in Reflection
-  - GrappleableObject
-  - PickUp
+  - 
+  - 
   - 
   - 
   - 

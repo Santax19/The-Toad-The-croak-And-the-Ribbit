@@ -23,6 +23,7 @@ public class DefaultWeaponBh : WeaponBehaviour
         GameObject bullet = Instantiate(bulletPrefab, firePoint.position, Quaternion.LookRotation(direction));
         if (bullet.TryGetComponent<Rigidbody>(out var rb))
             rb.velocity = direction * bulletSpeed;
+        PlayShotParticles();
     }
 
     public override void OnSecondaryFire(Camera cam, Transform firePoint)

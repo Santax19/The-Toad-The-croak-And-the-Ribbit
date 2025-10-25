@@ -11,6 +11,6 @@ public class DamageTrap : Trap
 
     protected override void OnExitTrap(PlayerHealth health, GameObject player)
     {
-        // nada
+        return;
     }
 }

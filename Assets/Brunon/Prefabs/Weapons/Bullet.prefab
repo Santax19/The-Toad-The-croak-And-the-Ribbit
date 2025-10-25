@@ -12,9 +12,9 @@ GameObject:
   - component: {fileID: 6735374325760651884}
   - component: {fileID: 3097700014267130564}
   - component: {fileID: 2350974078446342502}
-  - component: {fileID: 7580875381446902876}
   - component: {fileID: 1629596096864627914}
-  - component: {fileID: -3285729746173344297}
+  - component: {fileID: 5795488872716276939}
+  - component: {fileID: 883809990636821643}
   m_Layer: 0
   m_Name: Bullet
   m_TagString: Untagged
@@ -108,21 +108,6 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &7580875381446902876
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7349088826885203811}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cae47a99dcffb5e4da2d8884f7500abc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  lifeTime: 3
-  damage: 10
-  speed: 50
 --- !u!54 &1629596096864627914
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -150,7 +135,22 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &-3285729746173344297
+--- !u!114 &5795488872716276939
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7349088826885203811}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9bcb9ab406ff78f4e91fd7e2331d9fa4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  lifeTime: 5
+  damage: 10
+  speed: 50
+--- !u!114 &883809990636821643
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -162,10 +162,10 @@ MonoBehaviour:
   m_Script: {fileID: -1552182283, guid: e725a070cec140c4caffb81624c8c787, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SortKey: 1166312542
+  SortKey: 1628252887
   ObjectInterest: 1
   Flags: 262145
   NestedObjects: []
   NetworkedBehaviours:
-  - {fileID: 7580875381446902876}
+  - {fileID: 5795488872716276939}
   ForceRemoteRenderTimeframe: 0

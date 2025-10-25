@@ -20,6 +20,7 @@ public class RevolverBehaviour : WeaponBehaviour
         var bullet = Instantiate(bulletPrefab, firePoint.position, Quaternion.LookRotation(dir));
         if (bullet.TryGetComponent<Rigidbody>(out var rb))
             rb.velocity = dir * bulletSpeed;
+        PlayShotParticles();
     }
 
     public override void OnSecondaryFire(Camera cam, Transform firePoint)
@@ -38,7 +39,8 @@ public class RevolverBehaviour : WeaponBehaviour
             if (TryConsumeAmmo(1))
             {
                 OnPrimaryFire(cam, firePoint);
-                yield return new WaitForSeconds(burstDelay);
+                PlayShotParticles();
+                yield return new WaitForSeconds(burstDelay);            
             }
             else
                 break;

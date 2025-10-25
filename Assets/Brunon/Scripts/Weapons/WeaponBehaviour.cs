@@ -8,6 +8,7 @@ public abstract class WeaponBehaviour : MonoBehaviour
 
     [Header("Datos")]
     [SerializeField] protected WeaponData weaponData;
+    [SerializeField] protected ParticlesMan gunParticles;
 
     protected int currentAmmo;
     protected int reserveAmmo;
@@ -37,6 +38,12 @@ public abstract class WeaponBehaviour : MonoBehaviour
     public abstract void OnSecondaryFire(Camera playerCam, Transform firePoint);
 
     public virtual void OnReload() { }
+    protected void PlayShotParticles()
+    {
+        if (gunParticles != null)
+            gunParticles.PlayShotParticles();
+    }
+
 
     public virtual IEnumerator ReloadRoutine()
     {
