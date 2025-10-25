@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ParticlesMan: MonoBehaviour
+public class ParticlesMan : MonoBehaviour
 {
     [Header("Referencias a partículas")]
     [SerializeField] private ParticleSystem[] explosionParticles;

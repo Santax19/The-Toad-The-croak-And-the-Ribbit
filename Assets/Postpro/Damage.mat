@@ -37,13 +37,13 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _Active: 0
+    - _Active: 1
     - _BreathFreq: 6
-    - _VignetteIntensity: 7.58
-    - _VignettePower: 3.43
-    - _VoronoiScale: 6.04
+    - _VignetteIntensity: 4.64
+    - _VignettePower: 4.6
+    - _VoronoiScale: 3.03
     m_Colors:
     - _Color: {r: 0.4433962, g: 0.016541779, b: 0, a: 1}
     - _NoiseSpeed: {r: 0.25, g: 0.24, b: 0, a: 0}
-    - _Rojito: {r: 0.33962262, g: 0, b: 0, a: 0}
+    - _Rojito: {r: 0.09433961, g: 0.006861063, b: 0, a: 0}
   m_BuildTextureStacks: []
