@@ -20,6 +20,11 @@ public class MovementController : MonoBehaviour
     [Header("Crouch Walk Settings")]
     [SerializeField] private float _crouchSpeed = 3f; // velocidad lenta
     [SerializeField] private float _moveSmooth = 8f;
+    private bool _wantsToCrouch;
+
+    [Header("Air Control")]
+    [SerializeField] private float _airSteerStrength = 2.5f; // Fuerza del timón en el aire
+    [SerializeField] private float _maxAirSpeed = 15f; // Velocidad horizontal máxima en el aire
 
     private Rigidbody _rb;
     private Camera _playerCam;
@@ -28,6 +33,7 @@ public class MovementController : MonoBehaviour
 
     private Vector3 _headDefaultLocalPos;
     private Vector3 _lastInputDir = Vector3.zero;
+    private Vector3 _moveInput;
 
     private float _chargeTimer = 0f;
     private bool _isCharging = false;
@@ -52,72 +58,110 @@ public class MovementController : MonoBehaviour
         _baseCrouchSpeed = _crouchSpeed;
         _baseMaxForce = _maxForce;
     }
-
+    private void FixedUpdate()
+    {
+        // El control aéreo debe ir en FixedUpdate porque aplica fuerzas
+        HandleCrouching();
+        HandleAirSteering();
+    }
     private void Update()
     {
-        HandleInput();
+        HandleInputReading();
         HandleCameraChargeEffect();
     }
 
-    private void HandleInput()
+    private void HandleInputReading()
     {
         // Inputs básicos
         float h = Input.GetAxisRaw("Horizontal");
         float v = Input.GetAxisRaw("Vertical");
-        Vector3 moveInput = new Vector3(h, 0f, v).normalized;
+        _moveInput = new Vector3(h, 0f, v).normalized;
+        _wantsToCrouch = Input.GetKey(KeyCode.LeftShift);
 
         bool groundedOrWall = _floorDetector.IsGrounded || (_grapple != null && _grapple.IsStuckToWall);
         bool canJump = groundedOrWall && Time.time > _lastJumpTime + _jumpCooldown;
 
-        // --- Crouch (SHIFT + WASD) ---
-        if (Input.GetKey(KeyCode.LeftShift) && moveInput.magnitude > 0f && groundedOrWall)
+        // Lógica de Crouch (agacharse)
+        if (_wantsToCrouch && _moveInput.magnitude > 0f && groundedOrWall)
         {
-            // si estaba cargando, interrumpimos
             if (_isCharging)
             {
                 _isCharging = false;
                 _chargeTimer = 0f;
             }
-
             _isCrouching = true;
-            Vector3 camForward = _playerCam.transform.forward;
-            camForward.y = 0f;
-            camForward.Normalize();
 
-            Vector3 camRight = _playerCam.transform.right;
-            camRight.y = 0f;
-            camRight.Normalize();
-
-            Vector3 moveDir = (camForward * moveInput.z + camRight * moveInput.x).normalized;
-
-            // movimiento lento
-            Vector3 targetVelocity = moveDir * _crouchSpeed;
-            Vector3 velocity = Vector3.Lerp(new Vector3(_rb.velocity.x, 0, _rb.velocity.z), targetVelocity, Time.deltaTime * _moveSmooth);
-
-            _rb.velocity = new Vector3(velocity.x, _rb.velocity.y, velocity.z);
+            // --- MOVIDO A FIXEDUPDATE ---
+            // Toda la lógica de _rb.velocity se movió
+            // --- FIN MOVIDO ---
         }
         else
         {
             _isCrouching = false;
 
-            // --- Salto cargado ---
-            if (moveInput.magnitude > 0f && canJump)
+            // Lógica de Salto Cargado
+            if (_moveInput.magnitude > 0f && canJump)
             {
                 _isCharging = true;
                 _chargeTimer += Time.deltaTime;
                 _chargeTimer = Mathf.Clamp(_chargeTimer, 0f, _maxChargeTime);
-
-                _lastInputDir = moveInput;
+                _lastInputDir = _moveInput;
             }
 
-            // Al soltar input -> ejecutar salto
-            if (_isCharging && moveInput.magnitude == 0f)
+            if (_isCharging && _moveInput.magnitude == 0f)
             {
-                ExecuteJump();
+                ExecuteJump(); // ExecuteJump usa AddForce, por lo que está OK
             }
         }
     }
+    private void HandleCrouching()
+    {
+        if (!_isCrouching) return;
 
+        // Calculamos la dirección de la cámara (esto es rápido, no impacta)
+        Vector3 camForward = _playerCam.transform.forward;
+        camForward.y = 0f;
+        camForward.Normalize();
+
+        Vector3 camRight = _playerCam.transform.right;
+        camRight.y = 0f;
+        camRight.Normalize();
+
+        Vector3 moveDir = (camForward * _moveInput.z + camRight * _moveInput.x).normalized;
+
+        // Aplicamos la velocidad
+        Vector3 targetVelocity = moveDir * _crouchSpeed;
+
+        // Usamos Time.fixedDeltaTime porque estamos en FixedUpdate
+        Vector3 velocity = Vector3.Lerp(new Vector3(_rb.velocity.x, 0, _rb.velocity.z), targetVelocity, Time.fixedDeltaTime * _moveSmooth);
+
+        _rb.velocity = new Vector3(velocity.x, _rb.velocity.y, velocity.z);
+    }
+    private void HandleAirSteering()
+    {
+        bool inAir = !_floorDetector.IsGrounded;
+        bool isGrappling = _grapple != null && (_grapple.IsGrappling() || _grapple.IsStuckToWall);
+
+        // Solo aplicamos el timón si estamos en el aire y no estamos usando el gancho
+        if (inAir && !isGrappling)
+        {
+            // 1. Obtenemos la dirección de la cámara (solo horizontal)
+            Vector3 camDir = _playerCam.transform.forward;
+            camDir.y = 0;
+            camDir.Normalize();
+
+            // 2. Obtenemos la velocidad horizontal actual
+            Vector3 horizontalVel = new Vector3(_rb.velocity.x, 0, _rb.velocity.z);
+
+            // 3. Solo aplicamos fuerza si no hemos alcanzado la velocidad máxima
+            if (horizontalVel.magnitude < _maxAirSpeed)
+            {
+                // 4. Aplicamos una fuerza constante en la dirección de la cámara
+                // Esto permite "empujar" la trayectoria de tu salto
+                _rb.AddForce(camDir * _airSteerStrength, ForceMode.Acceleration);
+            }
+        }
+    }
     private void HandleCameraChargeEffect()
     {
         if (_headTransform == null) return;

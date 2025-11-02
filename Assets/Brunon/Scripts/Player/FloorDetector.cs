@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class FloorDetector : MonoBehaviour
 {
-    [HideInInspector] public bool IsGrounded = false;
+    public bool IsGrounded = false;
 
     private void OnTriggerEnter(Collider other)
     {
