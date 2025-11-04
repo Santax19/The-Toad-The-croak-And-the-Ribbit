@@ -21,9 +21,9 @@ public class GrappleBruno : MonoBehaviour
     private Vector3 _grapplePoint;
     private bool _isGrappling = false;
     private bool _isStuckToWall = false;
-    private bool _isDampingVelocity = false;
     private float _lastGrappleTime = -999f;
 
+    public bool IsGrappling() => _isGrappling;
     public bool IsStuckToWall => _isStuckToWall;
 
     private void Awake()
@@ -39,7 +39,7 @@ public class GrappleBruno : MonoBehaviour
 
         // cancelar manualmente
         if (Input.GetKeyUp(KeyCode.Space) && _isGrappling)
-            StopGrappling();
+            ReleaseGrappleMidAir();
     }
 
     private void FixedUpdate()
@@ -52,15 +52,6 @@ public class GrappleBruno : MonoBehaviour
         else if (_isStuckToWall)
         {
             StickToWall();
-        }
-        if (_isDampingVelocity)
-        {
-            // hacemos que la velocidad vaya decayendo hasta un 30%
-            _rb.velocity = Vector3.Lerp(_rb.velocity, _rb.velocity * 0.7f, 2f * Time.fixedDeltaTime);
-
-            // si ya está suficientemente cerca del 30%, cortamos
-            if (_rb.velocity.magnitude <= (_rb.velocity.magnitude * 0.71f))
-                _isDampingVelocity = false;
         }
     }
 
@@ -78,7 +69,7 @@ public class GrappleBruno : MonoBehaviour
                 var movement = GetComponent<MovementController>();
 
                 pickup.Consume(health, movement);
-                return; // no iniciamos grapple
+                return; // no iniciamos grapple 
             }
         }
 
@@ -88,18 +79,17 @@ public class GrappleBruno : MonoBehaviour
             _grapplePoint = hit.point;
             _isGrappling = true;
             _lastGrappleTime = Time.time;
+            _rb.useGravity = false;
         }
     }
 
     private void DoGrapple()
     {
         Vector3 dir = (_grapplePoint - transform.position).normalized;
-        _ = Vector3.Distance(transform.position, _grapplePoint);
-
         _rb.velocity = dir * _pullSpeed;
     }
 
-    private void StopGrapple()
+    private void AttachToWall()
     {
         // este Stop es SOLO por pared
         _isGrappling = false;
@@ -108,11 +98,10 @@ public class GrappleBruno : MonoBehaviour
         _rb.velocity = Vector3.zero;
     }
 
-    private void StopGrappling()
+    private void ReleaseGrappleMidAir()
     {
-        // este Stop es cuando suelta el gancho antes de llegar a pared
-        _isDampingVelocity = true;
         _isGrappling = false;
+        _rb.useGravity = true;
     }
     private void DetectWall()
     {
@@ -124,10 +113,7 @@ public class GrappleBruno : MonoBehaviour
             Vector3 center = transform.position + dir * _wallCheckDistance;
             if (Physics.CheckBox(center, _wallBoxSize / 2, Quaternion.identity, _wallMask))
             {
-                StopGrapple();
-                _isStuckToWall = true;
-                _rb.useGravity = false; // ignoramos gravedad
-                _rb.velocity = Vector3.zero;
+                AttachToWall();
                 return;
             }
         }
