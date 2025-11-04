@@ -40,7 +40,7 @@ Material:
     - _Active: 0
     - _BreathFreq: 6
     - _VignetteIntensity: 4.64
-    - _VignettePower: 4.6
+    - _VignettePower: 4.2
     - _VoronoiScale: 3.03
     m_Colors:
     - _Color: {r: 0.4433962, g: 0.016541779, b: 0, a: 1}

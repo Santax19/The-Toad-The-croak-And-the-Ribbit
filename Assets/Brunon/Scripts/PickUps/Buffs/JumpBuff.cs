@@ -7,7 +7,7 @@ public class JumpBuff : BuffData
 {
     public float jumpMultiplier = 1.5f;
 
-    public override void Apply(PlayerHealth health, MovementController movement)
+    public override void Apply(PlayerHealth health, MovementController movement, WeaponManager weaponManager)
     {
         movement.ModifyMovement(1f, jumpMultiplier);
         if (duration > 0) movement.StartCoroutine(ResetAfterTime(movement));

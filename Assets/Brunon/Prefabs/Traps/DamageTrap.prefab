@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 4262930238402506294}
   - component: {fileID: 5623591929309584708}
   - component: {fileID: 2022664679171230860}
-  m_Layer: 7
+  m_Layer: 3
   m_Name: DamageTrap
   m_TagString: Ground
   m_Icon: {fileID: 0}

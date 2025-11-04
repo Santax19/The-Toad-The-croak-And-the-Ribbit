@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 6794068075087104038}
   - component: {fileID: 7398896758622713992}
   - component: {fileID: 1328497960069719072}
-  m_Layer: 7
+  m_Layer: 3
   m_Name: StickyTrap
   m_TagString: Ground
   m_Icon: {fileID: 0}

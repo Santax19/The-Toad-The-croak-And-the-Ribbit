@@ -7,9 +7,10 @@ public class Pickup : MonoBehaviour
     [SerializeField] private BuffData _buff;
     public void Consume(PlayerHealth health, MovementController movement)
     {
-        if (health != null && movement != null)
+        var weaponManager = health.GetComponent<WeaponManager>();
+        if (health != null && movement != null && weaponManager != null)
         {
-            _buff.Apply(health, movement);
+            _buff.Apply(health, movement, weaponManager);
             Destroy(gameObject);
         }
     }

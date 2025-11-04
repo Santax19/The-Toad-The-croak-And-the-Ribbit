@@ -7,7 +7,7 @@ public class CrouchBuff : BuffData
 {
     public float crouchMultiplier = 2f;
 
-    public override void Apply(PlayerHealth health, MovementController movement)
+    public override void Apply(PlayerHealth health, MovementController movement, WeaponManager weaponManager)
     {
         movement.ModifyMovement(crouchMultiplier, 1f);
         if (FindObjectOfType<FullScreenFXMan>() is FullScreenFXMan fx)

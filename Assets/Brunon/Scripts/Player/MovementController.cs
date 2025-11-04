@@ -18,13 +18,12 @@ public class MovementController : MonoBehaviour
     [SerializeField] private Transform _headTransform;
 
     [Header("Crouch Walk Settings")]
-    [SerializeField] private float _crouchSpeed = 3f; // velocidad lenta
-    [SerializeField] private float _moveSmooth = 8f;
+    [SerializeField] private float _crouchSpeed; // velocidad lenta
+    [SerializeField] private float _moveSmooth;
     private bool _wantsToCrouch;
 
     [Header("Air Control")]
-    [SerializeField] private float _airSteerStrength = 2.5f; // Fuerza del timón en el aire
-    [SerializeField] private float _maxAirSpeed = 15f; // Velocidad horizontal máxima en el aire
+    [SerializeField] private float _airSteerStrength; // Fuerza del timón en el aire
 
     private Rigidbody _rb;
     private Camera _playerCam;
@@ -34,6 +33,7 @@ public class MovementController : MonoBehaviour
     private Vector3 _headDefaultLocalPos;
     private Vector3 _lastInputDir = Vector3.zero;
     private Vector3 _moveInput;
+    private Vector3 _lastJumpRawInput;
 
     private float _chargeTimer = 0f;
     private bool _isCharging = false;
@@ -90,10 +90,6 @@ public class MovementController : MonoBehaviour
                 _chargeTimer = 0f;
             }
             _isCrouching = true;
-
-            // --- MOVIDO A FIXEDUPDATE ---
-            // Toda la lógica de _rb.velocity se movió
-            // --- FIN MOVIDO ---
         }
         else
         {
@@ -106,6 +102,7 @@ public class MovementController : MonoBehaviour
                 _chargeTimer += Time.deltaTime;
                 _chargeTimer = Mathf.Clamp(_chargeTimer, 0f, _maxChargeTime);
                 _lastInputDir = _moveInput;
+                _lastJumpRawInput = _lastInputDir;
             }
 
             if (_isCharging && _moveInput.magnitude == 0f)
@@ -137,31 +134,6 @@ public class MovementController : MonoBehaviour
 
         _rb.velocity = new Vector3(velocity.x, _rb.velocity.y, velocity.z);
     }
-    private void HandleAirSteering()
-    {
-        bool inAir = !_floorDetector.IsGrounded;
-        bool isGrappling = _grapple != null && (_grapple.IsGrappling() || _grapple.IsStuckToWall);
-
-        // Solo aplicamos el timón si estamos en el aire y no estamos usando el gancho
-        if (inAir && !isGrappling)
-        {
-            // 1. Obtenemos la dirección de la cámara (solo horizontal)
-            Vector3 camDir = _playerCam.transform.forward;
-            camDir.y = 0;
-            camDir.Normalize();
-
-            // 2. Obtenemos la velocidad horizontal actual
-            Vector3 horizontalVel = new Vector3(_rb.velocity.x, 0, _rb.velocity.z);
-
-            // 3. Solo aplicamos fuerza si no hemos alcanzado la velocidad máxima
-            if (horizontalVel.magnitude < _maxAirSpeed)
-            {
-                // 4. Aplicamos una fuerza constante en la dirección de la cámara
-                // Esto permite "empujar" la trayectoria de tu salto
-                _rb.AddForce(camDir * _airSteerStrength, ForceMode.Acceleration);
-            }
-        }
-    }
     private void HandleCameraChargeEffect()
     {
         if (_headTransform == null) return;
@@ -175,7 +147,6 @@ public class MovementController : MonoBehaviour
             Time.deltaTime * _cameraLerpSpeed
         );
     }
-
     private void ExecuteJump()
     {
         _isCharging = false;
@@ -213,7 +184,58 @@ public class MovementController : MonoBehaviour
         _chargeTimer = 0f;
         _lastInputDir = Vector3.zero;
     }
+    private void HandleAirSteering()
+    {
+        bool inAir = !_floorDetector.IsGrounded;
+        bool isGrappling = _grapple != null && (_grapple.IsGrappling() || _grapple.IsStuckToWall);
 
+        // Solo aplicamos el timón si estamos en el aire y no estamos usando el gancho
+        if (inAir && !isGrappling && !_isCrouching) // Añadí !_isCrouching por si acaso
+        {
+            // 1. Decidimos el multiplicador basado en el input del salto
+            float steerMultiplier = 0f;
+
+            if (_lastJumpRawInput.z > 0f) // Salto con W, WA, o WD (eje Z positivo)
+            {
+                steerMultiplier = 1f; // Timón normal
+            }
+            else if (_lastJumpRawInput.z < 0f) // Salto con S, SA, o SD (eje Z negativo)
+            {
+                steerMultiplier = -1f; // Timón invertido
+            }
+            // Si _lastJumpRawInput.z == 0 (salto solo con A o D), el multiplicador queda en 0.
+
+            // 2. Si no hay timón (salto lateral), salimos
+            if (steerMultiplier == 0f)
+            {
+                return;
+            }
+            // 3. Obtenemos la dirección de la cámara (solo horizontal)
+            Vector3 horizontalVel = new Vector3(_rb.velocity.x, 0, _rb.velocity.z);
+            float currentSpeed = horizontalVel.magnitude;
+
+            // 3. Obtenemos la dirección objetivo (cámara)
+            Vector3 camDir = _playerCam.transform.forward;
+            camDir.y = 0;
+            camDir.Normalize();
+
+            // 4. Creamos el vector de "velocidad objetivo"
+            // (Dirección de la cámara * multiplicador * velocidad actual)
+            Vector3 targetVel = camDir * steerMultiplier * currentSpeed;
+
+            // 5. Usamos Lerp para mezclar la velocidad actual con la objetivo
+            // _airSteerStrength ahora actúa como la "velocidad de giro"
+            Vector3 newVel = Vector3.Lerp(
+                horizontalVel,
+                targetVel,
+                _airSteerStrength * Time.fixedDeltaTime
+            );
+
+            // 6. Aplicamos la nueva velocidad horizontal, pero mantenemos la vertical (gravedad)
+            _rb.velocity = new Vector3(newVel.x, _rb.velocity.y, newVel.z);
+
+        }
+    }
 
 
     public void ModifyMovement(float crouchMultiplier, float jumpMultiplier)

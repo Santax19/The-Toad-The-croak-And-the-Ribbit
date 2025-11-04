@@ -7,7 +7,6 @@ public class RevolverBehaviour : WeaponBehaviour
     [SerializeField] private GameObject bulletPrefab;
     [SerializeField] private float bulletSpeed = 60f;
     [SerializeField] private float burstDelay = 0.1f;
-    private float normalFOV;
 
     public override void OnPrimaryFire(Camera cam, Transform firePoint)
     {
@@ -40,6 +39,7 @@ public class RevolverBehaviour : WeaponBehaviour
             {
                 OnPrimaryFire(cam, firePoint);
                 PlayShotParticles();
+                weaponManager.NotifyAmmoChanged();
                 yield return new WaitForSeconds(burstDelay);            
             }
             else
@@ -49,6 +49,40 @@ public class RevolverBehaviour : WeaponBehaviour
 
     public override void OnEquip(Camera cam)
     {
-        normalFOV = cam.fieldOfView;
+        return;
+    }
+    public override void HandleInput(Camera playerCam, Transform firePoint)
+    {
+        if (IsReloading) return;
+
+        if (CurrentAmmo <= 0)
+        {
+            if (ReserveAmmo > 0 && !IsReloading)
+                OnReload();
+            return;
+        }
+        if (Input.GetButton("Fire1") && Time.time >= nextShootTime)
+        {
+            if (TryConsumeAmmo(1))
+            {
+                OnPrimaryFire(playerCam, firePoint);
+                nextShootTime = Time.time + WeaponData.fireRate;
+                weaponManager.NotifyAmmoChanged();
+            }
+        }
+
+        if (Input.GetButtonDown("Fire2"))
+        {
+            if (Time.time >= nextShootTime)
+            {
+                OnSecondaryFire(playerCam, firePoint);
+            }
+        }
+
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            OnReload();
+        }
+
     }
 }

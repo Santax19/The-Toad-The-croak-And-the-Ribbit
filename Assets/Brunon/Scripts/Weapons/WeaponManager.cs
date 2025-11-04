@@ -10,12 +10,11 @@ public class WeaponManager : MonoBehaviour
     [SerializeField] private Transform firePoint;
 
     [Header("Armas del jugador")]
-    [SerializeField] private List<WeaponBehaviour> ownedWeapons = new();
+    public List<WeaponBehaviour> ownedWeapons = new();
 
     private int currentWeaponIndex = -1;
     private WeaponBehaviour currentWeapon;
     private Coroutine reloadCoroutine;
-    private float nextShootTime = 0f;
 
     public event Action<int, int> OnAmmoChanged;
     private void Start()
@@ -31,54 +30,10 @@ public class WeaponManager : MonoBehaviour
     {
         if (currentWeapon == null) return;
 
-        HandleShooting();
-        HandleAiming();
+        currentWeapon.HandleInput(playerCam, firePoint);
         HandleWeaponSwitch();
     }
 
-    private void HandleShooting()
-    {
-        if (currentWeapon.IsReloading) return;
-
-        // no disparar si no hay balas
-        if (currentWeapon.CurrentAmmo <= 0)
-        {
-            if (currentWeapon.ReserveAmmo > 0 && !currentWeapon.IsReloading)
-                StartReload(currentWeapon);
-            return;
-        }
-
-        // Disparo principal
-        if (Input.GetButton("Fire1") && Time.time >= nextShootTime)
-        {
-            if (currentWeapon.TryConsumeAmmo(1))
-            {
-                currentWeapon.OnPrimaryFire(playerCam, firePoint);
-                nextShootTime = Time.time + currentWeapon.WeaponData.fireRate;
-                NotifyAmmoChanged();
-            }
-        }
-
-        // Acción secundaria (click derecho)
-        if (Input.GetButtonDown("Fire2"))
-            currentWeapon.OnSecondaryFire(playerCam, firePoint);
-
-        // Recarga manual
-        if (Input.GetKeyDown(KeyCode.R))
-            StartReload(currentWeapon);
-    }
-
-    private void HandleAiming()
-    {
-        var data = currentWeapon.WeaponData;
-        float targetFOV = Input.GetButton("Fire2") ? data.aimFOV : data.normalFOV;
-
-        playerCam.fieldOfView = Mathf.Lerp(
-            playerCam.fieldOfView,
-            targetFOV,
-            Time.deltaTime * data.aimSpeed
-        );
-    }
 
     public void StartReload(WeaponBehaviour weapon)
     {
@@ -99,13 +54,14 @@ public class WeaponManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Alpha1)) EquipWeapon(0);
         if (Input.GetKeyDown(KeyCode.Alpha2)) EquipWeapon(1);
         if (Input.GetKeyDown(KeyCode.Alpha3)) EquipWeapon(2);
+        if (Input.GetKeyDown(KeyCode.Alpha4)) EquipWeapon(3);
     }
 
-    private void EquipWeapon(int index)
+    public void EquipWeapon(int index)
     {
         if (index < 0 || index >= ownedWeapons.Count) return;
         if (index == currentWeaponIndex) return;
-
+        if (ownedWeapons[index] == null) return;
         // Cancelar recarga actual
         if (reloadCoroutine != null)
         {
@@ -128,17 +84,68 @@ public class WeaponManager : MonoBehaviour
 
         Debug.Log($"Equipado: {currentWeapon.WeaponData.weaponName} ({currentWeapon.CurrentAmmo}/{currentWeapon.ReserveAmmo})");
     }
-    private void NotifyAmmoChanged()
+    public void NotifyAmmoChanged()
     {
         if (currentWeapon == null) return;
         OnAmmoChanged?.Invoke(currentWeapon.CurrentAmmo, currentWeapon.ReserveAmmo);
     }
-    public void AddWeapon(WeaponBehaviour newWeapon)
+    public WeaponBehaviour AddWeaponToSlot(GameObject weaponPrefab, int slotIndex)
     {
-        if (!ownedWeapons.Contains(newWeapon))
+        if (weaponPrefab == null) return null;
+
+        // 0. Chequeo de seguridad
+        if (slotIndex < 0 || slotIndex >= ownedWeapons.Count)
         {
-            ownedWeapons.Add(newWeapon);
-            newWeapon.gameObject.SetActive(false);
+            Debug.LogError($"Slot Index {slotIndex} fuera de rango. La lista 'Owned Weapons' solo tiene {ownedWeapons.Count} elementos.");
+            return null;
         }
+
+        // 1. Si ya tenemos un arma en ese slot (ej. una granada vieja), la destruimos
+        if (ownedWeapons[slotIndex] != null)
+        {
+            Destroy(ownedWeapons[slotIndex].gameObject);
+        }
+
+        // 2. Creamos la instancia del arma
+        // --- ARREGLO DE JERARQUÍA: Ahora es hijo de 'firePoint' ---
+        GameObject weaponGO = Instantiate(weaponPrefab, firePoint); // <-- HIJO DE firePoint
+        weaponGO.transform.localPosition = Vector3.zero;
+        weaponGO.transform.localRotation = Quaternion.identity;
+
+        WeaponBehaviour newWeapon = weaponGO.GetComponent<WeaponBehaviour>();
+        if (newWeapon != null)
+        {
+            // 3. La asignamos al slot correcto en la lista
+            ownedWeapons[slotIndex] = newWeapon;
+
+            newWeapon.gameObject.SetActive(false); // La desactivamos por defecto
+            return newWeapon;
+        }
+        return null;
+    }
+    public void RemoveWeapon(WeaponBehaviour weaponToRemove)
+    {
+        if (weaponToRemove == null) return;
+        int weaponIndex = ownedWeapons.IndexOf(weaponToRemove);
+
+        if (weaponIndex != -1)
+        {
+            if (weaponIndex == currentWeaponIndex)
+            {
+                EquipWeapon(0);
+            }
+            ownedWeapons[weaponIndex] = null;
+            Destroy(weaponToRemove.gameObject);
+        }
+    }
+    // Buscamos un arma por su nombre (Data)
+    public WeaponBehaviour GetWeaponByName(string weaponName)
+    {
+        foreach (var weapon in ownedWeapons)
+        {
+            if (weapon != null && weapon.WeaponData.weaponName == weaponName)
+                return weapon;
+        }
+        return null;
     }
 }
