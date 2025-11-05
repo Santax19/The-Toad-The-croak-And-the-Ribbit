@@ -1,13 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Fusion;
 
 public class DefaultWeaponBh : WeaponBehaviour
 {
-    [SerializeField] private GameObject bulletPrefab;
-    [SerializeField] private float bulletSpeed = 50f;
+    [SerializeField] private NetworkObject bulletPrefab;
 
-    public override void OnPrimaryFire(Camera cam, Transform firePoint)
+    public override void OnPrimaryFire(NetworkRunner runner, Camera cam, Transform firePoint)
     {
         Ray ray = cam.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
         Vector3 targetPoint = ray.GetPoint(weaponData.range);
@@ -16,9 +16,11 @@ public class DefaultWeaponBh : WeaponBehaviour
             targetPoint = hit.point;
 
         Vector3 direction = (targetPoint - firePoint.position).normalized;
-        GameObject bullet = Instantiate(bulletPrefab, firePoint.position, Quaternion.LookRotation(direction));
-        if (bullet.TryGetComponent<Rigidbody>(out var rb))
-            rb.velocity = direction * bulletSpeed;
+        NetworkObject bullet = runner.Spawn(
+            bulletPrefab,
+            firePoint.position,
+            Quaternion.LookRotation(direction)
+        );
         PlayShotParticles();
     }
 

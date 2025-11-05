@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Fusion;
 
 public abstract class WeaponBehaviour : MonoBehaviour
 {
@@ -35,7 +36,7 @@ public abstract class WeaponBehaviour : MonoBehaviour
     public void CancelReload() => isReloading = false;
 
     // Métodos base
-    public abstract void OnPrimaryFire(Camera playerCam, Transform firePoint);
+    public abstract void OnPrimaryFire(NetworkRunner runner, Camera playerCam, Transform firePoint);
     public abstract void OnSecondaryFire(Camera playerCam, Transform firePoint);
 
     public virtual void OnReload() 
@@ -90,48 +91,47 @@ public abstract class WeaponBehaviour : MonoBehaviour
         if (weaponManager != null)
             weaponManager.NotifyAmmoChanged();
     }
-    public virtual void HandleInput(Camera playerCam, Transform firePoint)
+    public virtual void HandleInput(NetworkRunner runner, NetworkInputData data, Camera playerCam, Transform firePoint)
     {
-        // 1. Lógica de Recarga (si estamos recargando, no hacer nada más)
         if (IsReloading) return;
 
-        // 2. Lógica de Auto-Recarga si no hay balas
         if (CurrentAmmo <= 0)
         {
             if (ReserveAmmo > 0 && !IsReloading)
-                OnReload(); // Inicia la recarga
+                OnReload();
             return;
         }
 
         // 3. Lógica de Disparo (Fire1)
-        if (Input.GetButton("Fire1") && Time.time >= nextShootTime)
+        // --- Usa data.fire1 ---
+        if (data.fire1 && Time.time >= nextShootTime) // Time.time está OK aquí
         {
             if (TryConsumeAmmo(1))
             {
-                OnPrimaryFire(playerCam, firePoint);
+                OnPrimaryFire(runner, playerCam, firePoint);
                 nextShootTime = Time.time + WeaponData.fireRate;
                 weaponManager.NotifyAmmoChanged();
             }
         }
 
         // 4. Lógica de Acción Secundaria (Fire2)
-        if (Input.GetButtonDown("Fire2"))
+        if (data.fire2)
         {
             OnSecondaryFire(playerCam, firePoint);
         }
 
         // 5. Lógica de Recarga Manual (R)
-        if (Input.GetKeyDown(KeyCode.R))
+        if (data.reload)
         {
             OnReload();
         }
 
         // 6. Lógica de Apuntado (Aiming)
-        float targetFOV = Input.GetButton("Fire2") ? weaponData.aimFOV : weaponData.normalFOV;
+        float targetFOV = data.fire2 ? weaponData.aimFOV : weaponData.normalFOV;
         playerCam.fieldOfView = Mathf.Lerp(
             playerCam.fieldOfView,
             targetFOV,
-            Time.deltaTime * weaponData.aimSpeed
+            Time.deltaTime * weaponData.aimSpeed // Time.deltaTime está OK aquí
         );
     }
     // --- FIN NUEVA FUNCIÓN ---

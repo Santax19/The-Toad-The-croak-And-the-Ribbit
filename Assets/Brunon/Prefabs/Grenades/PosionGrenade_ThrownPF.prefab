@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 4569860853220147192}
   - component: {fileID: 3170869141101250203}
   - component: {fileID: 3227154706719995999}
+  - component: {fileID: -4753943676711201356}
   m_Layer: 0
   m_Name: PosionGrenade_ThrownPF
   m_TagString: Untagged
@@ -134,6 +135,24 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &-4753943676711201356
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 271533925641999555}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1552182283, guid: e725a070cec140c4caffb81624c8c787, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SortKey: 88142808
+  ObjectInterest: 1
+  Flags: 262145
+  NestedObjects: []
+  NetworkedBehaviours: []
+  ForceRemoteRenderTimeframe: 0
 --- !u!1 &8942512600894533809
 GameObject:
   m_ObjectHideFlags: 0

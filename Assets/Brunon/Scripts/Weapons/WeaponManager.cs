@@ -2,8 +2,9 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Fusion;
 
-public class WeaponManager : MonoBehaviour
+public class WeaponManager : NetworkBehaviour
 {
     [Header("Referencias")]
     [SerializeField] private Camera playerCam;
@@ -17,21 +18,34 @@ public class WeaponManager : MonoBehaviour
     private Coroutine reloadCoroutine;
 
     public event Action<int, int> OnAmmoChanged;
-    private void Start()
+    public override void Spawned()
     {
-        foreach (var w in ownedWeapons)
-            if (w != null) w.gameObject.SetActive(false);
+        // Esta es la nueva "Start()"
+        // Solo el jugador local debe equipar el arma al inicio
+        if (Object.HasInputAuthority)
+        {
+            foreach (var w in ownedWeapons)
+                if (w != null) w.gameObject.SetActive(false);
 
-        if (ownedWeapons.Count > 0)
-            EquipWeapon(0);
+            if (ownedWeapons.Count > 0)
+                EquipWeapon(0);
+        }
     }
-
-    private void Update()
+    public void NetworkedWeaponUpdate(NetworkInputData data)
     {
+        // Solo el jugador local (que tiene autoridad)
+        // debe leer los inputs de disparo y switch
+        if (!Object.HasInputAuthority)
+            return;
+
+        // Si no tenemos arma, no hacemos nada
         if (currentWeapon == null) return;
 
-        currentWeapon.HandleInput(playerCam, firePoint);
-        HandleWeaponSwitch();
+        // Pasamos los datos de red al arma actual
+        currentWeapon.HandleInput(Runner, data, playerCam, firePoint);
+
+        // Leemos los datos de switch de arma
+        HandleWeaponSwitch(data);
     }
 
 
@@ -49,12 +63,12 @@ public class WeaponManager : MonoBehaviour
         NotifyAmmoChanged(); //al terminar la recarga
     }
 
-    private void HandleWeaponSwitch()
+    private void HandleWeaponSwitch(NetworkInputData data)
     {
-        if (Input.GetKeyDown(KeyCode.Alpha1)) EquipWeapon(0);
-        if (Input.GetKeyDown(KeyCode.Alpha2)) EquipWeapon(1);
-        if (Input.GetKeyDown(KeyCode.Alpha3)) EquipWeapon(2);
-        if (Input.GetKeyDown(KeyCode.Alpha4)) EquipWeapon(3);
+        if (data.alpha1) EquipWeapon(0);
+        if (data.alpha2) EquipWeapon(1);
+        if (data.alpha3) EquipWeapon(2);
+        if (data.alpha4) EquipWeapon(3);
     }
 
     public void EquipWeapon(int index)

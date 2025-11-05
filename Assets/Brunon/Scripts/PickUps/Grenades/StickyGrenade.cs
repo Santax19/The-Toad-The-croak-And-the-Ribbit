@@ -1,15 +1,16 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Fusion;  
 
 public class StickyGrenade : BaseThrownGrenade
 {
     [Header("Pegajosa (Específico)")]
-    [SerializeField] private GameObject _slowZonePrefab; // Arrastra tu prefab de zona aquí
+    [SerializeField] private NetworkObject _slowZonePrefab; // Arrastra tu prefab de zona aquí
     [SerializeField] private float _maxGroundDistance = 20f;
     [SerializeField] private LayerMask _groundLayer;
     // ¡Aquí implementamos la lógica de la zona!
-    protected override void ActivateEffect()
+    protected override void ActivateEffect(NetworkRunner runner, Collision collision)
     {
         if (_slowZonePrefab == null)
         {
@@ -35,10 +36,11 @@ public class StickyGrenade : BaseThrownGrenade
         {
             Vector3 deployPosition = hit.point;
             Quaternion deployOrientation = Quaternion.FromToRotation(Vector3.up, hit.normal);
-            Instantiate(_slowZonePrefab, deployPosition, deployOrientation);
+            // Usamos runner.Instantiate para crear la zona en la red
+            runner.Spawn(_slowZonePrefab, deployPosition, deployOrientation);
+
+            // La clase base se encargará de destruir este proyectil
         }
 
-        // La clase base se encargará de destruir este proyectil
     }
-
 }

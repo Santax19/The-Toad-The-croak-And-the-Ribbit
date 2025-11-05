@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Fusion;
 
 public class DamageGrenade : BaseThrownGrenade
 {
@@ -15,7 +16,7 @@ public class DamageGrenade : BaseThrownGrenade
     [Tooltip("El % de daño mínimo que se hará en el borde exterior. (0.1 = 10%)")]
     [Range(0f, 1f)]
     [SerializeField] private float _minDamagePercent = 0.1f;
-    protected override void ActivateEffect()
+    protected override void ActivateEffect(NetworkRunner runner, Collision collision)
     {
         float innerRadius = explosionRadius * _innerRadiusPercent;
         float minDamage = _explosionDamage * _minDamagePercent;

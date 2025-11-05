@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 6794068075087104038}
   - component: {fileID: 7398896758622713992}
   - component: {fileID: 1328497960069719072}
+  - component: {fileID: 4292189660174703771}
   m_Layer: 3
   m_Name: StickyTrap
   m_TagString: Ground
@@ -120,3 +121,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _damage: 0
   _multiplier: 0.4
+--- !u!114 &4292189660174703771
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5878746591651878683}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1552182283, guid: e725a070cec140c4caffb81624c8c787, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SortKey: 2853250535
+  ObjectInterest: 1
+  Flags: 262145
+  NestedObjects: []
+  NetworkedBehaviours: []
+  ForceRemoteRenderTimeframe: 0

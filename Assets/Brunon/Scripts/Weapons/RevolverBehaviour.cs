@@ -1,14 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Fusion;
 
 public class RevolverBehaviour : WeaponBehaviour
 {
-    [SerializeField] private GameObject bulletPrefab;
-    [SerializeField] private float bulletSpeed = 60f;
+    [SerializeField] private NetworkObject bulletPrefab;
     [SerializeField] private float burstDelay = 0.1f;
-
-    public override void OnPrimaryFire(Camera cam, Transform firePoint)
+    private bool _wasFire2Pressed = false;
+    public override void OnPrimaryFire(NetworkRunner runner, Camera cam, Transform firePoint)
     {
         Ray ray = cam.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
         Vector3 targetPoint = ray.GetPoint(weaponData.range);
@@ -16,9 +16,11 @@ public class RevolverBehaviour : WeaponBehaviour
             targetPoint = hit.point;
 
         Vector3 dir = (targetPoint - firePoint.position).normalized;
-        var bullet = Instantiate(bulletPrefab, firePoint.position, Quaternion.LookRotation(dir));
-        if (bullet.TryGetComponent<Rigidbody>(out var rb))
-            rb.velocity = dir * bulletSpeed;
+        NetworkObject bullet = runner.Spawn(
+            bulletPrefab,
+            firePoint.position,
+            Quaternion.LookRotation(dir)
+        );
         PlayShotParticles();
     }
 
@@ -37,7 +39,8 @@ public class RevolverBehaviour : WeaponBehaviour
         {
             if (TryConsumeAmmo(1))
             {
-                OnPrimaryFire(cam, firePoint);
+                if (weaponManager != null)
+                    OnPrimaryFire(weaponManager.Runner, cam, firePoint);
                 PlayShotParticles();
                 weaponManager.NotifyAmmoChanged();
                 yield return new WaitForSeconds(burstDelay);            
@@ -51,7 +54,7 @@ public class RevolverBehaviour : WeaponBehaviour
     {
         return;
     }
-    public override void HandleInput(Camera playerCam, Transform firePoint)
+    public override void HandleInput(NetworkRunner runner, NetworkInputData data, Camera playerCam, Transform firePoint)
     {
         if (IsReloading) return;
 
@@ -61,28 +64,32 @@ public class RevolverBehaviour : WeaponBehaviour
                 OnReload();
             return;
         }
-        if (Input.GetButton("Fire1") && Time.time >= nextShootTime)
+
+        // 1. Disparo (lee de 'data')
+        if (data.fire1 && Time.time >= nextShootTime)
         {
             if (TryConsumeAmmo(1))
             {
-                OnPrimaryFire(playerCam, firePoint);
+                OnPrimaryFire(runner,playerCam, firePoint);
                 nextShootTime = Time.time + WeaponData.fireRate;
                 weaponManager.NotifyAmmoChanged();
             }
         }
 
-        if (Input.GetButtonDown("Fire2"))
+        // 2. Ráfaga (detecta el "click" desde 'data')
+        bool fire2Down = data.fire2 && !_wasFire2Pressed;
+        if (fire2Down && Time.time >= nextShootTime)
         {
-            if (Time.time >= nextShootTime)
-            {
-                OnSecondaryFire(playerCam, firePoint);
-            }
+            OnSecondaryFire(playerCam, firePoint);
         }
 
-        if (Input.GetKeyDown(KeyCode.R))
+        // 3. Recarga (lee de 'data')
+        if (data.reload)
         {
             OnReload();
         }
 
+        // 4. Actualizamos el estado "anterior" de fire2
+        _wasFire2Pressed = data.fire2;
     }
 }

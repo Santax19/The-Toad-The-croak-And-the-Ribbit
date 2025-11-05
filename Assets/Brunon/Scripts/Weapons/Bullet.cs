@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Fusion;
-
+[RequireComponent(typeof(Rigidbody))]
 public class Bullet : NetworkBehaviour
 {
     [SerializeField] private float lifeTime = 5f;
@@ -10,13 +10,13 @@ public class Bullet : NetworkBehaviour
     [SerializeField] private float speed = 50f;
 
     private Rigidbody _rb;
-
+    [Networked] private TickTimer _lifeTimer { get; set; }
     public override void Spawned()
     {
         _rb = GetComponent<Rigidbody>();
-
+        _rb.velocity = transform.forward * speed;
         // destrucción automática en red
-        Runner.Despawn(Object);
+        _lifeTimer = TickTimer.CreateFromSeconds(Runner, lifeTime);
     }
 
     public void Initialize(Vector3 direction, float speed)
@@ -24,7 +24,14 @@ public class Bullet : NetworkBehaviour
         _rb = GetComponent<Rigidbody>();
         _rb.velocity = direction * speed;
     }
-
+    public override void FixedUpdateNetwork()
+    {
+        // Si el timer de red se acabó, despawneamos la bala
+        if (_lifeTimer.Expired(Runner))
+        {
+            Runner.Despawn(Object);
+        }
+    }
 
     private void OnCollisionEnter(Collision collision)
     {

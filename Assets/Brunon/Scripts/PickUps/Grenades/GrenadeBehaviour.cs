@@ -1,3 +1,4 @@
+using Fusion;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,10 +6,14 @@ using UnityEngine;
 public class GrenadeBehaviour : WeaponBehaviour
 {
     [Header("Lógica de Granada")]
-    [SerializeField] private GameObject thrownGrenadePrefab; // El prefab que se LANZA
+    [SerializeField] private NetworkObject thrownGrenadePrefab; // El prefab que se LANZA
 
-    private bool isCooking = false;
-    private float cookStartTime;
+    [Networked] private NetworkBool _isCooking { get; set; } = false;
+    [Networked] private float _cookStartTime { get; set; } = 0;
+
+    // Variables locales para detectar "click"
+    private bool _wasFire1Pressed = false;
+
     private GrenadeData _grenadeData;
     protected override void Awake()
     {
@@ -21,64 +26,76 @@ public class GrenadeBehaviour : WeaponBehaviour
         reserveAmmo = 0;
     }
 
-    public override void HandleInput(Camera playerCam, Transform firePoint)
+    public override void HandleInput(NetworkRunner runner, NetworkInputData data, Camera playerCam, Transform firePoint)
     {
-        // No hay recarga, no hay auto-recarga.
+        // Detectamos los eventos "Down" y "Up" desde el estado de red
+        bool fire1Pressed = data.fire1 && !_wasFire1Pressed;
+        bool fire1Released = !data.fire1 && _wasFire1Pressed;
 
         // 1. Iniciar "cocinado" (LMB Presionado)
-        if (Input.GetButtonDown("Fire1") && !isCooking && currentAmmo > 0)
+        if (fire1Pressed && !_isCooking && currentAmmo > 0)
         {
-            isCooking = true;
-            cookStartTime = Time.time;
+            _isCooking = true;
+            _cookStartTime = runner.SimulationTime; // <-- Usamos el tiempo de red
             Debug.Log("Cocinando granada...");
         }
 
         // 2. Lanzar granada (LMB Suelto)
-        if (Input.GetButtonUp("Fire1") && isCooking)
+        if (fire1Released && _isCooking)
         {
-            isCooking = false;
+            _isCooking = false;
 
-            if (TryConsumeAmmo(1)) // Usa una granada
+            if (TryConsumeAmmo(1))
             {
-                ThrowGrenade(playerCam, firePoint);
+                ThrowGrenade(runner, playerCam, firePoint);
                 weaponManager.NotifyAmmoChanged();
             }
             if (currentAmmo == 0)
             {
-                // Le decimos al manager que nos quite
                 weaponManager.RemoveWeapon(this);
             }
         }
 
         // 3. Apuntado (RMB Hold)
-        if (Input.GetButton("Fire2"))
+        if (data.fire2) // <-- Lee de 'data'
         {
             // Lógica de trayectoria
         }
 
         // 4. Auto-explosión en mano
-        if (isCooking && (Time.time - cookStartTime) >= _grenadeData.cookTime)
+        if (_isCooking && (runner.SimulationTime - _cookStartTime) >= _grenadeData.cookTime) // <-- Usamos el tiempo de red
         {
             Debug.Log("¡BOOM! Explotó en la mano.");
-            isCooking = false;
+            _isCooking = false;
             TryConsumeAmmo(1);
             // Lógica de daño al jugador aquí
             weaponManager.NotifyAmmoChanged();
         }
+
+        // 5. Actualizamos el estado "anterior" de fire1
+        _wasFire1Pressed = data.fire1;
     }
 
-    private void ThrowGrenade(Camera playerCam, Transform firePoint)
+    private void ThrowGrenade(NetworkRunner runner, Camera playerCam, Transform firePoint)
     {
         Debug.Log("Lanzando granada");
-        GameObject grenadeInstance = Instantiate(thrownGrenadePrefab, firePoint.position, playerCam.transform.rotation);
 
-        float timeCooked = Time.time - cookStartTime;
+        // --- ¡ARREGLO! Usa 'runner' (minúscula) ---
+        NetworkObject grenadeInstance = runner.Spawn(
+            thrownGrenadePrefab,
+            firePoint.position,
+            playerCam.transform.rotation
+        );
+
+        // --- ¡ARREGLO! Usa 'runner' (minúscula) ---
+        float timeCooked = runner.SimulationTime - _cookStartTime;
         float remainingTime = _grenadeData.cookTime - timeCooked;
 
-        BaseThrownGrenade thrownScript = grenadeInstance.GetComponent<BaseThrownGrenade>();
+        BaseThrownGrenade thrownScript = grenadeInstance.GetComponent<BaseThrownGrenade>(); ;
         if (thrownScript != null)
         {
-            thrownScript.Initialize(remainingTime);
+            // ¡Le pasamos el runner a la granada lanzada!
+            thrownScript.Initialize(runner, remainingTime);
         }
 
         Rigidbody rb = grenadeInstance.GetComponent<Rigidbody>();
@@ -97,7 +114,7 @@ public class GrenadeBehaviour : WeaponBehaviour
     {
         yield break;
     }
-    public override void OnPrimaryFire(Camera playerCam, Transform firePoint)
+    public override void OnPrimaryFire(NetworkRunner runner, Camera playerCam, Transform firePoint)
     {
         // No hacemos nada aquí.
     }

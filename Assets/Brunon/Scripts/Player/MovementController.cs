@@ -1,10 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using Fusion;
 [RequireComponent(typeof(Rigidbody))]
 
-public class MovementController : MonoBehaviour
+public class MovementController : NetworkBehaviour
 {
     [Header("Jump Settings")]
     [SerializeField] private float _maxChargeTime = 2f;
@@ -20,7 +20,6 @@ public class MovementController : MonoBehaviour
     [Header("Crouch Walk Settings")]
     [SerializeField] private float _crouchSpeed; // velocidad lenta
     [SerializeField] private float _moveSmooth;
-    private bool _wantsToCrouch;
 
     [Header("Air Control")]
     [SerializeField] private float _airSteerStrength; // Fuerza del timón en el aire
@@ -29,65 +28,70 @@ public class MovementController : MonoBehaviour
     private Camera _playerCam;
     private FloorDetector _floorDetector;
     private GrappleBruno _grapple;
+    private WeaponManager _weaponManager;
 
+    [Networked] private float ChargeTimer { get; set; } = 0f;
+    [Networked] private NetworkBool IsCharging { get; set; } = false;
+    [Networked] private Vector3 LastInputDir { get; set; } = Vector3.zero;
+    [Networked] private Vector3 LastJumpRawInput { get; set; } = Vector3.zero;
+
+    // --- Variables Locales (no necesitan red) ---
     private Vector3 _headDefaultLocalPos;
-    private Vector3 _lastInputDir = Vector3.zero;
-    private Vector3 _moveInput;
-    private Vector3 _lastJumpRawInput;
-
-    private float _chargeTimer = 0f;
-    private bool _isCharging = false;
-    private bool _isCrouching = false;
+    private bool _isCrouching = false; // El crouch es local, solo afecta el movimiento
     private float _baseCrouchSpeed;
     private float _baseMaxForce;
-
     private float _lastJumpTime;
 
-    private void Start()
-    {
-        if (_headTransform != null)
-            _headDefaultLocalPos = _headTransform.localPosition;
-    }
 
-    private void Awake()
+    public override void Spawned()
     {
+        // Awake() se convierte en la parte de arriba de Spawned()
         _rb = GetComponent<Rigidbody>();
-        _grapple = GetComponent<GrappleBruno>();
-        _playerCam = GetComponentInChildren<Camera>();
+        _grapple = GetComponent<GrappleBruno>(); // Lo adaptaremos después
+        _playerCam = GetComponentInChildren<Camera>(); // Ojo: CameraController ya la maneja
         _floorDetector = GetComponentInChildren<FloorDetector>();
+        _weaponManager = GetComponent<WeaponManager>();
         _baseCrouchSpeed = _crouchSpeed;
         _baseMaxForce = _maxForce;
-    }
-    private void FixedUpdate()
-    {
-        // El control aéreo debe ir en FixedUpdate porque aplica fuerzas
-        HandleCrouching();
-        HandleAirSteering();
-    }
-    private void Update()
-    {
-        HandleInputReading();
-        HandleCameraChargeEffect();
+
+        // Start() se convierte en la parte de abajo
+        if (_headTransform != null)
+            _headDefaultLocalPos = _headTransform.localPosition;
+
+        // IMPORTANTE: Desactivamos la interpolación de Rigidbody para
+        // que el NetworkRigidbody (que añadiremos) tome el control.
+        _rb.interpolation = RigidbodyInterpolation.None;
     }
 
-    private void HandleInputReading()
+    public override void FixedUpdateNetwork()
     {
-        // Inputs básicos
-        float h = Input.GetAxisRaw("Horizontal");
-        float v = Input.GetAxisRaw("Vertical");
-        _moveInput = new Vector3(h, 0f, v).normalized;
-        _wantsToCrouch = Input.GetKey(KeyCode.LeftShift);
+        // Solo el jugador con autoridad de input puede ejecutar esto
+        // El estado (posición, _isCharging) se sincronizará a los demás
+        if (!GetInput(out NetworkInputData data))
+        {
+            // Si no tenemos input, no hacemos nada
+            return;
+        }
+        if (_weaponManager != null)
+        {
+            _weaponManager.NetworkedWeaponUpdate(data);
+        }
+        // --- Lógica porteada de HandleInputReading() ---
+        Vector3 moveInput = new Vector3(data.moveInput.x, 0f, data.moveInput.y).normalized;
+        bool wantsToCrouch = data.crouch;
 
         bool groundedOrWall = _floorDetector.IsGrounded || (_grapple != null && _grapple.IsStuckToWall);
-        bool canJump = groundedOrWall && Time.time > _lastJumpTime + _jumpCooldown;
+        bool canJump = groundedOrWall && Runner.SimulationTime > _lastJumpTime + _jumpCooldown;
 
-        // Lógica de Crouch (agacharse)
-        if (_wantsToCrouch && _moveInput.magnitude > 0f && groundedOrWall)
+        if (groundedOrWall) { LastJumpRawInput = Vector3.zero; }
+
+        // Lógica de Crouch
+        if (wantsToCrouch && moveInput.magnitude > 0f && groundedOrWall)
         {
-            if (_isCharging)
+            if (IsCharging)
             {
-                _isCharging = false;
-                _chargeTimer = 0f;
+                IsCharging = false;
+                ChargeTimer = 0f;
             }
             _isCrouching = true;
         }
@@ -96,26 +100,37 @@ public class MovementController : MonoBehaviour
             _isCrouching = false;
 
             // Lógica de Salto Cargado
-            if (_moveInput.magnitude > 0f && canJump)
+            if (moveInput.magnitude > 0f && canJump)
             {
-                _isCharging = true;
-                _chargeTimer += Time.deltaTime;
-                _chargeTimer = Mathf.Clamp(_chargeTimer, 0f, _maxChargeTime);
-                _lastInputDir = _moveInput;
-                _lastJumpRawInput = _lastInputDir;
+                IsCharging = true;
+                ChargeTimer += Runner.DeltaTime; // Usamos Runner.DeltaTime
+                ChargeTimer = Mathf.Clamp(ChargeTimer, 0f, _maxChargeTime);
+                LastInputDir = moveInput;
+                LastJumpRawInput = LastInputDir;
             }
 
-            if (_isCharging && _moveInput.magnitude == 0f)
+            if (IsCharging && moveInput.magnitude == 0f)
             {
-                ExecuteJump(); // ExecuteJump usa AddForce, por lo que está OK
+                ExecuteJump();
             }
         }
+
+        // --- Lógica porteada de FixedUpdate() ---
+        HandleCrouching(moveInput); // Le pasamos el input
+        HandleAirSteering();
     }
-    private void HandleCrouching()
+    public override void Render()
+    {
+        // Solo el jugador local necesita ver el efecto de "bajar" la cámara
+        if (Object.HasInputAuthority)
+        {
+            HandleCameraChargeEffect();
+        }
+    }
+    private void HandleCrouching(Vector3 moveInput)
     {
         if (!_isCrouching) return;
 
-        // Calculamos la dirección de la cámara (esto es rápido, no impacta)
         Vector3 camForward = _playerCam.transform.forward;
         camForward.y = 0f;
         camForward.Normalize();
@@ -124,13 +139,12 @@ public class MovementController : MonoBehaviour
         camRight.y = 0f;
         camRight.Normalize();
 
-        Vector3 moveDir = (camForward * _moveInput.z + camRight * _moveInput.x).normalized;
-
-        // Aplicamos la velocidad
+        // Usamos el moveInput que nos llegó por red
+        Vector3 moveDir = (camForward * moveInput.z + camRight * moveInput.x).normalized;
         Vector3 targetVelocity = moveDir * _crouchSpeed;
 
-        // Usamos Time.fixedDeltaTime porque estamos en FixedUpdate
-        Vector3 velocity = Vector3.Lerp(new Vector3(_rb.velocity.x, 0, _rb.velocity.z), targetVelocity, Time.fixedDeltaTime * _moveSmooth);
+        // Usamos Runner.DeltaTime
+        Vector3 velocity = Vector3.Lerp(new Vector3(_rb.velocity.x, 0, _rb.velocity.z), targetVelocity, Runner.DeltaTime * _moveSmooth);
 
         _rb.velocity = new Vector3(velocity.x, _rb.velocity.y, velocity.z);
     }
@@ -138,9 +152,10 @@ public class MovementController : MonoBehaviour
     {
         if (_headTransform == null) return;
 
-        float chargePercent = _chargeTimer / _maxChargeTime;
+        float chargePercent = ChargeTimer / _maxChargeTime;
         Vector3 target = _headDefaultLocalPos + Vector3.down * (_cameraDropAmount * chargePercent);
 
+        // Usamos Time.deltaTime (normal) porque Render() corre en el loop de Unity
         _headTransform.localPosition = Vector3.Lerp(
             _headTransform.localPosition,
             target,
@@ -149,8 +164,8 @@ public class MovementController : MonoBehaviour
     }
     private void ExecuteJump()
     {
-        _isCharging = false;
-        _lastJumpTime = Time.time;
+        IsCharging = false;
+        _lastJumpTime = Runner.SimulationTime;
 
         if (_grapple != null && _grapple.IsStuckToWall)
             _grapple.ReleaseFromWall();
@@ -160,12 +175,12 @@ public class MovementController : MonoBehaviour
         Vector3 camRight = _playerCam.transform.right.normalized;
 
         // input proyectado en plano
-        Vector3 inputDir = (camForward * _lastInputDir.z + camRight * _lastInputDir.x);
+        Vector3 inputDir = (camForward * LastInputDir.z + camRight * LastInputDir.x);
         inputDir.y = 0f;
         inputDir.Normalize();
 
         // carga
-        float chargePercent = _chargeTimer / _maxChargeTime;
+        float chargePercent = ChargeTimer / _maxChargeTime;
         float jumpForce = Mathf.Lerp(_minForce, _maxForce, _chargeCurve.Evaluate(chargePercent));
 
         // altura en función del ángulo cámara
@@ -181,8 +196,8 @@ public class MovementController : MonoBehaviour
         _rb.AddForce(jumpDir + Vector3.up * verticalForce, ForceMode.Impulse);
 
         // reset
-        _chargeTimer = 0f;
-        _lastInputDir = Vector3.zero;
+        ChargeTimer = 0f;
+        LastInputDir = Vector3.zero;
     }
     private void HandleAirSteering()
     {
@@ -195,15 +210,15 @@ public class MovementController : MonoBehaviour
             // 1. Decidimos el multiplicador basado en el input del salto
             float steerMultiplier = 0f;
 
-            if (_lastJumpRawInput.z > 0f) // Salto con W, WA, o WD (eje Z positivo)
+            if (LastJumpRawInput.z > 0f) // Salto con W, WA, o WD (eje Z positivo)
             {
                 steerMultiplier = 1f; // Timón normal
             }
-            else if (_lastJumpRawInput.z < 0f) // Salto con S, SA, o SD (eje Z negativo)
+            else if (LastJumpRawInput.z < 0f) // Salto con S, SA, o SD (eje Z negativo)
             {
                 steerMultiplier = -1f; // Timón invertido
             }
-            // Si _lastJumpRawInput.z == 0 (salto solo con A o D), el multiplicador queda en 0.
+            // Si LastJumpRawInput.z == 0 (salto solo con A o D), el multiplicador queda en 0.
 
             // 2. Si no hay timón (salto lateral), salimos
             if (steerMultiplier == 0f)
