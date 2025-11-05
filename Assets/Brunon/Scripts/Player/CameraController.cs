@@ -1,8 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Fusion;
 
-public class CameraController : MonoBehaviour
+public class CameraController : NetworkBehaviour
 {
     [Header("Mouse Settings")]
     [SerializeField] private float _sensitivity = 100f; // sensibilidad del mouse
@@ -10,14 +11,29 @@ public class CameraController : MonoBehaviour
 
     private float _xRotation = 0f; // control de inclinación vertical
 
-    private void Start()
+    private Camera _camera;
+
+    public override void Spawned()
     {
-        // bloqueamos el cursor en el centro y lo ocultamos
-        Cursor.lockState = CursorLockMode.Locked;
+        _camera = GetComponentInChildren<Camera>(true);
+
+        //  Solo activa la camara si este jugador es local
+        if (Object.HasInputAuthority)
+        {
+            _camera.gameObject.SetActive(true);
+            Cursor.lockState = CursorLockMode.Locked;
+        }
+        else
+        {
+            _camera.gameObject.SetActive(false);
+        }
     }
 
     private void Update()
     {
+
+        if (!Object.HasInputAuthority)
+            return;
         // input del mouse
         float mouseX = Input.GetAxis("Mouse X") * _sensitivity * Time.deltaTime;
         float mouseY = Input.GetAxis("Mouse Y") * _sensitivity * Time.deltaTime;
