@@ -37,7 +37,7 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _Active: 0
+    - _Active: 1
     - _VignetteIntensity: 20.07
     - _VignettePower: 4.22
     - _VoronoiScale: 5.86

@@ -38,7 +38,7 @@ Material:
     m_Ints: []
     m_Floats:
     - _Active: 0
-    - _Alpha: 1
+    - _Alpha: 0.45
     - _MaskIntensity: 0.58
     - _MaskPower: 0.66
     - _Velocity: 6

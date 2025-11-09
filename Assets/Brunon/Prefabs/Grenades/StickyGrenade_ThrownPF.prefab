@@ -150,7 +150,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   explosionRadius: 5
   activationEffect: {fileID: 3229329970709302325}
-  _slowZonePrefab: {fileID: 5878746591651878683, guid: 43533ba0e7239294097822789de6185a, type: 3}
+  _slowZonePrefab: {fileID: 4292189660174703771, guid: 43533ba0e7239294097822789de6185a, type: 3}
   _maxGroundDistance: 20
   _groundLayer:
     serializedVersion: 2

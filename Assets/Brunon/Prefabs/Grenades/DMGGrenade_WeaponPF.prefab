@@ -120,4 +120,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   weaponData: {fileID: 11400000, guid: 5786ea8955ad31b46a79454a9c218729, type: 2}
   gunParticles: {fileID: 0}
-  thrownGrenadePrefab: {fileID: 8527667008393152735, guid: dbe984947b536054c9aec3d14e6c977c, type: 3}
+  thrownGrenadePrefab: {fileID: 5844293948107550254, guid: dbe984947b536054c9aec3d14e6c977c, type: 3}
