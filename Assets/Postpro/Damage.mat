@@ -37,7 +37,7 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _Active: 1
+    - _Active: 0
     - _BreathFreq: 6
     - _VignetteIntensity: 4.64
     - _VignettePower: 3.69

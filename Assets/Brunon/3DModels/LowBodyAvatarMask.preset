@@ -1,0 +1,651 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!181963792 &2655988077585873504
+Preset:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: LowBodyAvatarMask
+  m_TargetType:
+    m_NativeTypeID: 319
+    m_ManagedTypePPtr: {fileID: 0}
+    m_ManagedTypeFallback: 
+  m_Properties:
+  - target: {fileID: 0}
+    propertyPath: m_Mask.Array.size
+    value: 13
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_Mask.Array.data[0]
+    value: 1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_Mask.Array.data[1]
+    value: 1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_Mask.Array.data[2]
+    value: 1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_Mask.Array.data[3]
+    value: 1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_Mask.Array.data[4]
+    value: 1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_Mask.Array.data[5]
+    value: 1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_Mask.Array.data[6]
+    value: 1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_Mask.Array.data[7]
+    value: 1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_Mask.Array.data[8]
+    value: 1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_Mask.Array.data[9]
+    value: 1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_Mask.Array.data[10]
+    value: 1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_Mask.Array.data[11]
+    value: 1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_Mask.Array.data[12]
+    value: 1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_Elements.Array.size
+    value: 72
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_Elements.Array.data[0].m_Path
+    value: 
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_Elements.Array.data[0].m_Weight
+    value: 1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_Elements.Array.data[1].m_Path
+    value: Armature
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_Elements.Array.data[1].m_Weight
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_Elements.Array.data[2].m_Path
+    value: Armature/FeetIK.l
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_Elements.Array.data[2].m_Weight
+    value: 1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_Elements.Array.data[3].m_Path
+    value: Armature/FeetIK.l/TargetBone.l
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_Elements.Array.data[3].m_Weight
+    value: 1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_Elements.Array.data[4].m_Path
+    value: Armature/FeetIK.l/TargetBone.l/TargetBone.l_end
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_Elements.Array.data[4].m_Weight
+    value: 1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_Elements.Array.data[5].m_Path
+    value: Armature/FeetIK.r
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_Elements.Array.data[5].m_Weight
+    value: 1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_Elements.Array.data[6].m_Path
+    value: Armature/FeetIK.r/TargetBone.r
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_Elements.Array.data[6].m_Weight
+    value: 1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_Elements.Array.data[7].m_Path
+    value: Armature/FeetIK.r/TargetBone.r/TargetBone.r_end
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_Elements.Array.data[7].m_Weight
+    value: 1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_Elements.Array.data[8].m_Path
+    value: Armature/Origin
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_Elements.Array.data[8].m_Weight
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_Elements.Array.data[9].m_Path
+    value: Armature/Origin/Pelvis
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_Elements.Array.data[9].m_Weight
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_Elements.Array.data[10].m_Path
+    value: Armature/Origin/Pelvis/Hip.l
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_Elements.Array.data[10].m_Weight
+    value: 1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_Elements.Array.data[11].m_Path
+    value: Armature/Origin/Pelvis/Hip.l/Thigh.l
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_Elements.Array.data[11].m_Weight
+    value: 1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_Elements.Array.data[12].m_Path
+    value: Armature/Origin/Pelvis/Hip.l/Thigh.l/Calve.l
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_Elements.Array.data[12].m_Weight
+    value: 1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_Elements.Array.data[13].m_Path
+    value: Armature/Origin/Pelvis/Hip.l/Thigh.l/Calve.l/PreFeet.l
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_Elements.Array.data[13].m_Weight
+    value: 1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_Elements.Array.data[14].m_Path
+    value: Armature/Origin/Pelvis/Hip.l/Thigh.l/Calve.l/PreFeet.l/Feet.l
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_Elements.Array.data[14].m_Weight
+    value: 1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_Elements.Array.data[15].m_Path
+    value: Armature/Origin/Pelvis/Hip.l/Thigh.l/Calve.l/PreFeet.l/Feet.l/Feet.l_end
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_Elements.Array.data[15].m_Weight
+    value: 1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_Elements.Array.data[16].m_Path
+    value: Armature/Origin/Pelvis/Hip.r
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_Elements.Array.data[16].m_Weight
+    value: 1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_Elements.Array.data[17].m_Path
+    value: Armature/Origin/Pelvis/Hip.r/Thigh.r
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_Elements.Array.data[17].m_Weight
+    value: 1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_Elements.Array.data[18].m_Path
+    value: Armature/Origin/Pelvis/Hip.r/Thigh.r/Calve.r
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_Elements.Array.data[18].m_Weight
+    value: 1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_Elements.Array.data[19].m_Path
+    value: Armature/Origin/Pelvis/Hip.r/Thigh.r/Calve.r/PreFeet.r
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_Elements.Array.data[19].m_Weight
+    value: 1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_Elements.Array.data[20].m_Path
+    value: Armature/Origin/Pelvis/Hip.r/Thigh.r/Calve.r/PreFeet.r/Feet.r
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_Elements.Array.data[20].m_Weight
+    value: 1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_Elements.Array.data[21].m_Path
+    value: Armature/Origin/Pelvis/Hip.r/Thigh.r/Calve.r/PreFeet.r/Feet.r/Feet.r_end
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_Elements.Array.data[21].m_Weight
+    value: 1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_Elements.Array.data[22].m_Path
+    value: Armature/Origin/Pelvis/Spine
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_Elements.Array.data[22].m_Weight
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_Elements.Array.data[23].m_Path
+    value: Armature/Origin/Pelvis/Spine/Chest
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_Elements.Array.data[23].m_Weight
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_Elements.Array.data[24].m_Path
+    value: Armature/Origin/Pelvis/Spine/Chest/Head
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_Elements.Array.data[24].m_Weight
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_Elements.Array.data[25].m_Path
+    value: Armature/Origin/Pelvis/Spine/Chest/Head/BottomLip
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_Elements.Array.data[25].m_Weight
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_Elements.Array.data[26].m_Path
+    value: Armature/Origin/Pelvis/Spine/Chest/Head/BottomLip/BottomLip_end
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_Elements.Array.data[26].m_Weight
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_Elements.Array.data[27].m_Path
+    value: Armature/Origin/Pelvis/Spine/Chest/Head/UpperLip
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_Elements.Array.data[27].m_Weight
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_Elements.Array.data[28].m_Path
+    value: Armature/Origin/Pelvis/Spine/Chest/Head/UpperLip/UpperLip_end
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_Elements.Array.data[28].m_Weight
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_Elements.Array.data[29].m_Path
+    value: Armature/Origin/Pelvis/Spine/Chest/Shoulder.l
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_Elements.Array.data[29].m_Weight
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_Elements.Array.data[30].m_Path
+    value: Armature/Origin/Pelvis/Spine/Chest/Shoulder.l/Arm.l
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_Elements.Array.data[30].m_Weight
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_Elements.Array.data[31].m_Path
+    value: Armature/Origin/Pelvis/Spine/Chest/Shoulder.l/Arm.l/Arm.l.001
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_Elements.Array.data[31].m_Weight
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_Elements.Array.data[32].m_Path
+    value: Armature/Origin/Pelvis/Spine/Chest/Shoulder.l/Arm.l/Arm.l.001/IndexStart.l
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_Elements.Array.data[32].m_Weight
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_Elements.Array.data[33].m_Path
+    value: Armature/Origin/Pelvis/Spine/Chest/Shoulder.l/Arm.l/Arm.l.001/IndexStart.l/IndexHalf.l
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_Elements.Array.data[33].m_Weight
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_Elements.Array.data[34].m_Path
+    value: Armature/Origin/Pelvis/Spine/Chest/Shoulder.l/Arm.l/Arm.l.001/IndexStart.l/IndexHalf.l/IndexEnd.l
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_Elements.Array.data[34].m_Weight
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_Elements.Array.data[35].m_Path
+    value: Armature/Origin/Pelvis/Spine/Chest/Shoulder.l/Arm.l/Arm.l.001/IndexStart.l/IndexHalf.l/IndexEnd.l/IndexEnd.l_end
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_Elements.Array.data[35].m_Weight
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_Elements.Array.data[36].m_Path
+    value: Armature/Origin/Pelvis/Spine/Chest/Shoulder.l/Arm.l/Arm.l.001/MiddleStart.l
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_Elements.Array.data[36].m_Weight
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_Elements.Array.data[37].m_Path
+    value: Armature/Origin/Pelvis/Spine/Chest/Shoulder.l/Arm.l/Arm.l.001/MiddleStart.l/MiddleHalf.l
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_Elements.Array.data[37].m_Weight
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_Elements.Array.data[38].m_Path
+    value: Armature/Origin/Pelvis/Spine/Chest/Shoulder.l/Arm.l/Arm.l.001/MiddleStart.l/MiddleHalf.l/MiddleEnd.l
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_Elements.Array.data[38].m_Weight
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_Elements.Array.data[39].m_Path
+    value: Armature/Origin/Pelvis/Spine/Chest/Shoulder.l/Arm.l/Arm.l.001/MiddleStart.l/MiddleHalf.l/MiddleEnd.l/MiddleEnd.l_end
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_Elements.Array.data[39].m_Weight
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_Elements.Array.data[40].m_Path
+    value: Armature/Origin/Pelvis/Spine/Chest/Shoulder.l/Arm.l/Arm.l.001/PinkyStart.l
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_Elements.Array.data[40].m_Weight
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_Elements.Array.data[41].m_Path
+    value: Armature/Origin/Pelvis/Spine/Chest/Shoulder.l/Arm.l/Arm.l.001/PinkyStart.l/PinkyHalf.l
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_Elements.Array.data[41].m_Weight
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_Elements.Array.data[42].m_Path
+    value: Armature/Origin/Pelvis/Spine/Chest/Shoulder.l/Arm.l/Arm.l.001/PinkyStart.l/PinkyHalf.l/PinkyEnd.l
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_Elements.Array.data[42].m_Weight
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_Elements.Array.data[43].m_Path
+    value: Armature/Origin/Pelvis/Spine/Chest/Shoulder.l/Arm.l/Arm.l.001/PinkyStart.l/PinkyHalf.l/PinkyEnd.l/PinkyEnd.l_end
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_Elements.Array.data[43].m_Weight
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_Elements.Array.data[44].m_Path
+    value: Armature/Origin/Pelvis/Spine/Chest/Shoulder.l/Arm.l/Arm.l.001/ThumbStart.l
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_Elements.Array.data[44].m_Weight
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_Elements.Array.data[45].m_Path
+    value: Armature/Origin/Pelvis/Spine/Chest/Shoulder.l/Arm.l/Arm.l.001/ThumbStart.l/ThumbHalf.l
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_Elements.Array.data[45].m_Weight
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_Elements.Array.data[46].m_Path
+    value: Armature/Origin/Pelvis/Spine/Chest/Shoulder.l/Arm.l/Arm.l.001/ThumbStart.l/ThumbHalf.l/ThumbEnd.l
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_Elements.Array.data[46].m_Weight
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_Elements.Array.data[47].m_Path
+    value: Armature/Origin/Pelvis/Spine/Chest/Shoulder.l/Arm.l/Arm.l.001/ThumbStart.l/ThumbHalf.l/ThumbEnd.l/ThumbEnd.l_end
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_Elements.Array.data[47].m_Weight
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_Elements.Array.data[48].m_Path
+    value: Armature/Origin/Pelvis/Spine/Chest/Shoulder.r
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_Elements.Array.data[48].m_Weight
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_Elements.Array.data[49].m_Path
+    value: Armature/Origin/Pelvis/Spine/Chest/Shoulder.r/Arm.r
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_Elements.Array.data[49].m_Weight
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_Elements.Array.data[50].m_Path
+    value: Armature/Origin/Pelvis/Spine/Chest/Shoulder.r/Arm.r/Arm.r.001
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_Elements.Array.data[50].m_Weight
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_Elements.Array.data[51].m_Path
+    value: Armature/Origin/Pelvis/Spine/Chest/Shoulder.r/Arm.r/Arm.r.001/IndexStart.r
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_Elements.Array.data[51].m_Weight
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_Elements.Array.data[52].m_Path
+    value: Armature/Origin/Pelvis/Spine/Chest/Shoulder.r/Arm.r/Arm.r.001/IndexStart.r/IndexHalf.r
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_Elements.Array.data[52].m_Weight
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_Elements.Array.data[53].m_Path
+    value: Armature/Origin/Pelvis/Spine/Chest/Shoulder.r/Arm.r/Arm.r.001/IndexStart.r/IndexHalf.r/IndexEnd.r
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_Elements.Array.data[53].m_Weight
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_Elements.Array.data[54].m_Path
+    value: Armature/Origin/Pelvis/Spine/Chest/Shoulder.r/Arm.r/Arm.r.001/IndexStart.r/IndexHalf.r/IndexEnd.r/IndexEnd.r_end
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_Elements.Array.data[54].m_Weight
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_Elements.Array.data[55].m_Path
+    value: Armature/Origin/Pelvis/Spine/Chest/Shoulder.r/Arm.r/Arm.r.001/MiddleStart.r
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_Elements.Array.data[55].m_Weight
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_Elements.Array.data[56].m_Path
+    value: Armature/Origin/Pelvis/Spine/Chest/Shoulder.r/Arm.r/Arm.r.001/MiddleStart.r/MiddleHalf.r
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_Elements.Array.data[56].m_Weight
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_Elements.Array.data[57].m_Path
+    value: Armature/Origin/Pelvis/Spine/Chest/Shoulder.r/Arm.r/Arm.r.001/MiddleStart.r/MiddleHalf.r/MiddleEnd.r
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_Elements.Array.data[57].m_Weight
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_Elements.Array.data[58].m_Path
+    value: Armature/Origin/Pelvis/Spine/Chest/Shoulder.r/Arm.r/Arm.r.001/MiddleStart.r/MiddleHalf.r/MiddleEnd.r/MiddleEnd.r_end
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_Elements.Array.data[58].m_Weight
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_Elements.Array.data[59].m_Path
+    value: Armature/Origin/Pelvis/Spine/Chest/Shoulder.r/Arm.r/Arm.r.001/PinkyStart.r
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_Elements.Array.data[59].m_Weight
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_Elements.Array.data[60].m_Path
+    value: Armature/Origin/Pelvis/Spine/Chest/Shoulder.r/Arm.r/Arm.r.001/PinkyStart.r/PinkyHalf.r
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_Elements.Array.data[60].m_Weight
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_Elements.Array.data[61].m_Path
+    value: Armature/Origin/Pelvis/Spine/Chest/Shoulder.r/Arm.r/Arm.r.001/PinkyStart.r/PinkyHalf.r/PinkyEnd.r
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_Elements.Array.data[61].m_Weight
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_Elements.Array.data[62].m_Path
+    value: Armature/Origin/Pelvis/Spine/Chest/Shoulder.r/Arm.r/Arm.r.001/PinkyStart.r/PinkyHalf.r/PinkyEnd.r/PinkyEnd.r_end
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_Elements.Array.data[62].m_Weight
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_Elements.Array.data[63].m_Path
+    value: Armature/Origin/Pelvis/Spine/Chest/Shoulder.r/Arm.r/Arm.r.001/ThumbStart.r
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_Elements.Array.data[63].m_Weight
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_Elements.Array.data[64].m_Path
+    value: Armature/Origin/Pelvis/Spine/Chest/Shoulder.r/Arm.r/Arm.r.001/ThumbStart.r/ThumbHalf.r
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_Elements.Array.data[64].m_Weight
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_Elements.Array.data[65].m_Path
+    value: Armature/Origin/Pelvis/Spine/Chest/Shoulder.r/Arm.r/Arm.r.001/ThumbStart.r/ThumbHalf.r/ThumbEnd.r
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_Elements.Array.data[65].m_Weight
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_Elements.Array.data[66].m_Path
+    value: Armature/Origin/Pelvis/Spine/Chest/Shoulder.r/Arm.r/Arm.r.001/ThumbStart.r/ThumbHalf.r/ThumbEnd.r/ThumbEnd.r_end
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_Elements.Array.data[66].m_Weight
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_Elements.Array.data[67].m_Path
+    value: Cube.001
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_Elements.Array.data[67].m_Weight
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_Elements.Array.data[68].m_Path
+    value: Cube.002
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_Elements.Array.data[68].m_Weight
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_Elements.Array.data[69].m_Path
+    value: Cube.003
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_Elements.Array.data[69].m_Weight
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_Elements.Array.data[70].m_Path
+    value: Cube.006
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_Elements.Array.data[70].m_Weight
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_Elements.Array.data[71].m_Path
+    value: Cube.007
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_Elements.Array.data[71].m_Weight
+    value: 0
+    objectReference: {fileID: 0}
+  m_ExcludedProperties: []

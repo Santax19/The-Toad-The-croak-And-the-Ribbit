@@ -20,7 +20,8 @@ public class MovementController : NetworkBehaviour
     [Header("Crouch Walk Settings")]
     [SerializeField] private float _crouchSpeed; // velocidad lenta
     [SerializeField] private float _moveSmooth;
-
+    [Header("Animation")]
+    [SerializeField] private NetworkMecanimAnimator _netAnimator;
     [Header("Air Control")]
     [SerializeField] private float _airSteerStrength; // Fuerza del timón en el aire
 
@@ -30,12 +31,18 @@ public class MovementController : NetworkBehaviour
     private GrappleBruno _grapple;
     private WeaponManager _weaponManager;
 
+    [Networked] private float JumpLaunchTime { get; set; }
     [Networked] private float ChargeTimer { get; set; } = 0f;
     [Networked] private NetworkBool IsCharging { get; set; } = false;
     [Networked] private Vector3 LastInputDir { get; set; } = Vector3.zero;
     [Networked] private Vector3 LastJumpRawInput { get; set; } = Vector3.zero;
+    [Networked] private float AnimInputX { get; set; }
+    [Networked] private float AnimInputY { get; set; }
+    // Sincronizamos si está en el aire
+    [Networked] private NetworkBool IsJumpingBool { get; set; }
 
-    // --- Variables Locales (no necesitan red) ---
+
+    // --- Variables Locales
     private Vector3 _headDefaultLocalPos;
     private bool _isCrouching = false; // El crouch es local, solo afecta el movimiento
     private float _baseCrouchSpeed;
@@ -53,7 +60,7 @@ public class MovementController : NetworkBehaviour
         _weaponManager = GetComponent<WeaponManager>();
         _baseCrouchSpeed = _crouchSpeed;
         _baseMaxForce = _maxForce;
-
+        if (_netAnimator == null) _netAnimator = GetComponentInChildren<NetworkMecanimAnimator>();
         // Start() se convierte en la parte de abajo
         if (_headTransform != null)
             _headDefaultLocalPos = _headTransform.localPosition;
@@ -67,26 +74,37 @@ public class MovementController : NetworkBehaviour
     {
         // Solo el jugador con autoridad de input puede ejecutar esto
         // El estado (posición, _isCharging) se sincronizará a los demás
-        if (!GetInput(out NetworkInputData data))
-        {
-            // Si no tenemos input, no hacemos nada
-            return;
-        }
+        if (!GetInput(out NetworkInputData data)) { return; } // Si no tenemos input, no hacemos nada
         if (_weaponManager != null)
         {
             _weaponManager.NetworkedWeaponUpdate(data);
         }
         // --- Lógica porteada de HandleInputReading() ---
-        Vector3 moveInput = new Vector3(data.moveInput.x, 0f, data.moveInput.y).normalized;
-        bool wantsToCrouch = data.crouch;
+        Vector3 moveInputRaw = new Vector3(data.moveInput.x, 0f, data.moveInput.y).normalized;
+        if (IsJumpingBool)
+        {
+            AnimInputX = 0f;
+            AnimInputY = 0f;
+        }
+        else
+        {
+            // Solo actualizamos los inputs de animación si estamos en el suelo
+            AnimInputX = moveInputRaw.x;
+            AnimInputY = moveInputRaw.z;
+        }
 
         bool groundedOrWall = _floorDetector.IsGrounded || (_grapple != null && _grapple.IsStuckToWall);
+        bool isTakingOff = Runner.SimulationTime < JumpLaunchTime + 0.5f;
+
+        // Si no estamos en suelo ni pared, estamos saltando/cayendo
+        IsJumpingBool = !groundedOrWall || isTakingOff;
+        bool wantsToCrouch = data.crouch;
         bool canJump = groundedOrWall && Runner.SimulationTime > _lastJumpTime + _jumpCooldown;
 
         if (groundedOrWall) { LastJumpRawInput = Vector3.zero; }
 
         // Lógica de Crouch
-        if (wantsToCrouch && moveInput.magnitude > 0f && groundedOrWall)
+        if (wantsToCrouch && moveInputRaw.magnitude > 0f && groundedOrWall)
         {
             if (IsCharging)
             {
@@ -100,23 +118,23 @@ public class MovementController : NetworkBehaviour
             _isCrouching = false;
 
             // Lógica de Salto Cargado
-            if (moveInput.magnitude > 0f && canJump)
+            if (moveInputRaw.magnitude > 0f && canJump)
             {
                 IsCharging = true;
                 ChargeTimer += Runner.DeltaTime; // Usamos Runner.DeltaTime
                 ChargeTimer = Mathf.Clamp(ChargeTimer, 0f, _maxChargeTime);
-                LastInputDir = moveInput;
+                LastInputDir = moveInputRaw;
                 LastJumpRawInput = LastInputDir;
             }
 
-            if (IsCharging && moveInput.magnitude == 0f)
+            if (IsCharging && moveInputRaw.magnitude == 0f)
             {
                 ExecuteJump();
             }
         }
 
         // --- Lógica porteada de FixedUpdate() ---
-        HandleCrouching(moveInput); // Le pasamos el input
+        HandleCrouching(moveInputRaw); // Le pasamos el input
         HandleAirSteering();
     }
     public override void Render()
@@ -125,6 +143,14 @@ public class MovementController : NetworkBehaviour
         if (Object.HasInputAuthority)
         {
             HandleCameraChargeEffect();
+            if (_netAnimator != null)
+            {
+                // Pasamos las variables sincronizadas al Animator
+                _netAnimator.Animator.SetFloat("InputX", AnimInputX);
+                _netAnimator.Animator.SetFloat("InputY", AnimInputY);
+                _netAnimator.Animator.SetBool("IsCharging", IsCharging);
+                _netAnimator.Animator.SetBool("IsJumping", IsJumpingBool);
+            }
         }
     }
     private void HandleCrouching(Vector3 moveInput)
@@ -166,7 +192,7 @@ public class MovementController : NetworkBehaviour
     {
         IsCharging = false;
         _lastJumpTime = Runner.SimulationTime;
-
+        JumpLaunchTime = Runner.SimulationTime;
         if (_grapple != null && _grapple.IsStuckToWall)
             _grapple.ReleaseFromWall();
 
@@ -194,14 +220,14 @@ public class MovementController : NetworkBehaviour
 
         // aplicar fuerza
         _rb.AddForce(jumpDir + Vector3.up * verticalForce, ForceMode.Impulse);
-
         // reset
         ChargeTimer = 0f;
+        LastJumpRawInput = LastInputDir;
         LastInputDir = Vector3.zero;
     }
     private void HandleAirSteering()
     {
-        bool inAir = !_floorDetector.IsGrounded;
+        bool inAir = IsJumpingBool;
         bool isGrappling = _grapple != null && (_grapple.IsGrappling() || _grapple.IsStuckToWall);
 
         // Solo aplicamos el timón si estamos en el aire y no estamos usando el gancho
@@ -226,7 +252,7 @@ public class MovementController : NetworkBehaviour
                 return;
             }
             // 3. Obtenemos la dirección de la cámara (solo horizontal)
-            Vector3 horizontalVel = new Vector3(_rb.velocity.x, 0, _rb.velocity.z);
+            Vector3 horizontalVel = new(_rb.velocity.x, 0, _rb.velocity.z);
             float currentSpeed = horizontalVel.magnitude;
 
             // 3. Obtenemos la dirección objetivo (cámara)
@@ -236,7 +262,7 @@ public class MovementController : NetworkBehaviour
 
             // 4. Creamos el vector de "velocidad objetivo"
             // (Dirección de la cámara * multiplicador * velocidad actual)
-            Vector3 targetVel = camDir * steerMultiplier * currentSpeed;
+            Vector3 targetVel = currentSpeed * steerMultiplier * camDir;
 
             // 5. Usamos Lerp para mezclar la velocidad actual con la objetivo
             // _airSteerStrength ahora actúa como la "velocidad de giro"
