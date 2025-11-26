@@ -9,7 +9,6 @@ public class WeaponManager : NetworkBehaviour
     [Header("Referencias")]
     [SerializeField] private Camera playerCam;
     [SerializeField] private Transform firePoint;
-
     [Header("Armas del jugador")]
     public List<WeaponBehaviour> ownedWeapons = new();
 
@@ -18,6 +17,7 @@ public class WeaponManager : NetworkBehaviour
     private Coroutine reloadCoroutine;
 
     public event Action<int, int> OnAmmoChanged;
+    [Networked] public NetworkBool IsAiming { get; set; }
     public override void Spawned()
     {
         // Esta es la nueva "Start()"
@@ -40,7 +40,10 @@ public class WeaponManager : NetworkBehaviour
 
         // Si no tenemos arma, no hacemos nada
         if (currentWeapon == null) return;
-
+        if (Object.HasInputAuthority)
+        {
+            IsAiming = data.fire2;
+        }
         // Pasamos los datos de red al arma actual
         currentWeapon.HandleInput(Runner, data, playerCam, firePoint);
 

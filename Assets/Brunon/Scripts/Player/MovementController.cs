@@ -32,14 +32,15 @@ public class MovementController : NetworkBehaviour
     private WeaponManager _weaponManager;
 
     [Networked] private float JumpLaunchTime { get; set; }
-    [Networked] private float ChargeTimer { get; set; } = 0f;
-    [Networked] private NetworkBool IsCharging { get; set; } = false;
-    [Networked] private Vector3 LastInputDir { get; set; } = Vector3.zero;
-    [Networked] private Vector3 LastJumpRawInput { get; set; } = Vector3.zero;
-    [Networked] private float AnimInputX { get; set; }
-    [Networked] private float AnimInputY { get; set; }
+    [Networked] public float ChargeTimer { get; set; } = 0f;
+    [Networked] public NetworkBool IsCharging { get; set; } = false;
+    [Networked] public Vector3 LastInputDir { get; set; } = Vector3.zero;
+    [Networked] public Vector3 LastJumpRawInput { get; set; } = Vector3.zero;
+    [Networked] public float NetworkMoveSpeed { get; set; }
+    [Networked] public float AnimInputX { get; set; }
+    [Networked] public float AnimInputY { get; set; }
     // Sincronizamos si está en el aire
-    [Networked] private NetworkBool IsJumpingBool { get; set; }
+    [Networked] public NetworkBool IsJumpingBool { get; set; }
 
 
     // --- Variables Locales
@@ -60,8 +61,6 @@ public class MovementController : NetworkBehaviour
         _weaponManager = GetComponent<WeaponManager>();
         _baseCrouchSpeed = _crouchSpeed;
         _baseMaxForce = _maxForce;
-        if (_netAnimator == null) _netAnimator = GetComponentInChildren<NetworkMecanimAnimator>();
-        // Start() se convierte en la parte de abajo
         if (_headTransform != null)
             _headDefaultLocalPos = _headTransform.localPosition;
 
@@ -74,27 +73,36 @@ public class MovementController : NetworkBehaviour
     {
         // Solo el jugador con autoridad de input puede ejecutar esto
         // El estado (posición, _isCharging) se sincronizará a los demás
-        if (!GetInput(out NetworkInputData data)) { return; } // Si no tenemos input, no hacemos nada
+        if (!GetInput(out NetworkInputData data)) return;
+        
         if (_weaponManager != null)
-        {
             _weaponManager.NetworkedWeaponUpdate(data);
-        }
-        // --- Lógica porteada de HandleInputReading() ---
+
+        // 1. Estado de Salto
+        bool groundedOrWall = _floorDetector.IsGrounded || (_grapple != null && _grapple.IsStuckToWall);
+        bool isTakingOff = Runner.SimulationTime < (JumpLaunchTime + 0.2f);
+        IsJumpingBool = !groundedOrWall || isTakingOff;
+
+        // 2. Inputs de Movimiento
         Vector3 moveInputRaw = new Vector3(data.moveInput.x, 0f, data.moveInput.y).normalized;
+
+        // 3. Actualizar Variables para el Animador
         if (IsJumpingBool)
         {
             AnimInputX = 0f;
             AnimInputY = 0f;
+            NetworkMoveSpeed = 0f;
         }
         else
         {
-            // Solo actualizamos los inputs de animación si estamos en el suelo
             AnimInputX = moveInputRaw.x;
             AnimInputY = moveInputRaw.z;
+            
+            // Calculamos velocidad real horizontal para el Blend Tree de brazos
+            float horizontalVel = new Vector3(_rb.velocity.x, 0, _rb.velocity.z).magnitude;
+            // Si hay input, mandamos velocidad, si no, 0 (para evitar deslizamiento visual)
+            NetworkMoveSpeed = moveInputRaw.magnitude > 0.1f ? horizontalVel : 0f;
         }
-
-        bool groundedOrWall = _floorDetector.IsGrounded || (_grapple != null && _grapple.IsStuckToWall);
-        bool isTakingOff = Runner.SimulationTime < JumpLaunchTime + 0.5f;
 
         // Si no estamos en suelo ni pared, estamos saltando/cayendo
         IsJumpingBool = !groundedOrWall || isTakingOff;
@@ -136,22 +144,6 @@ public class MovementController : NetworkBehaviour
         // --- Lógica porteada de FixedUpdate() ---
         HandleCrouching(moveInputRaw); // Le pasamos el input
         HandleAirSteering();
-    }
-    public override void Render()
-    {
-        // Solo el jugador local necesita ver el efecto de "bajar" la cámara
-        if (Object.HasInputAuthority)
-        {
-            HandleCameraChargeEffect();
-            if (_netAnimator != null)
-            {
-                // Pasamos las variables sincronizadas al Animator
-                _netAnimator.Animator.SetFloat("InputX", AnimInputX);
-                _netAnimator.Animator.SetFloat("InputY", AnimInputY);
-                _netAnimator.Animator.SetBool("IsCharging", IsCharging);
-                _netAnimator.Animator.SetBool("IsJumping", IsJumpingBool);
-            }
-        }
     }
     private void HandleCrouching(Vector3 moveInput)
     {

@@ -1,0 +1,147 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!319 &31900000
+AvatarMask:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Arms
+  m_Mask: 00000000000000000100000000000000000000000100000001000000000000000000000000000000000000000000000000000000
+  m_Elements:
+  - m_Path: 
+    m_Weight: 1
+  - m_Path: Armature
+    m_Weight: 0
+  - m_Path: Armature/Origin
+    m_Weight: 0
+  - m_Path: Armature/Origin/Pelvis
+    m_Weight: 0
+  - m_Path: Armature/Origin/Pelvis/Hip.l
+    m_Weight: 0
+  - m_Path: Armature/Origin/Pelvis/Hip.l/Thigh.l
+    m_Weight: 0
+  - m_Path: Armature/Origin/Pelvis/Hip.l/Thigh.l/Calve.l
+    m_Weight: 0
+  - m_Path: Armature/Origin/Pelvis/Hip.l/Thigh.l/Calve.l/PreFeet.l
+    m_Weight: 0
+  - m_Path: Armature/Origin/Pelvis/Hip.l/Thigh.l/Calve.l/PreFeet.l/Feet.l
+    m_Weight: 0
+  - m_Path: Armature/Origin/Pelvis/Hip.l/Thigh.l/Calve.l/PreFeet.l/Feet.l/Feet.l_end
+    m_Weight: 0
+  - m_Path: Armature/Origin/Pelvis/Hip.r
+    m_Weight: 0
+  - m_Path: Armature/Origin/Pelvis/Hip.r/Thigh.r
+    m_Weight: 0
+  - m_Path: Armature/Origin/Pelvis/Hip.r/Thigh.r/Calve.r
+    m_Weight: 0
+  - m_Path: Armature/Origin/Pelvis/Hip.r/Thigh.r/Calve.r/PreFeet.r
+    m_Weight: 0
+  - m_Path: Armature/Origin/Pelvis/Hip.r/Thigh.r/Calve.r/PreFeet.r/Feet.r
+    m_Weight: 0
+  - m_Path: Armature/Origin/Pelvis/Hip.r/Thigh.r/Calve.r/PreFeet.r/Feet.r/Feet.r_end
+    m_Weight: 0
+  - m_Path: Armature/Origin/Pelvis/Spine
+    m_Weight: 0
+  - m_Path: Armature/Origin/Pelvis/Spine/Chest
+    m_Weight: 0
+  - m_Path: Armature/Origin/Pelvis/Spine/Chest/Head
+    m_Weight: 1
+  - m_Path: Armature/Origin/Pelvis/Spine/Chest/Head/BottomLip
+    m_Weight: 1
+  - m_Path: Armature/Origin/Pelvis/Spine/Chest/Head/BottomLip/BottomLip_end
+    m_Weight: 1
+  - m_Path: Armature/Origin/Pelvis/Spine/Chest/Head/UpperLip
+    m_Weight: 1
+  - m_Path: Armature/Origin/Pelvis/Spine/Chest/Head/UpperLip/UpperLip_end
+    m_Weight: 1
+  - m_Path: Armature/Origin/Pelvis/Spine/Chest/Shoulder.l
+    m_Weight: 1
+  - m_Path: Armature/Origin/Pelvis/Spine/Chest/Shoulder.l/Arm.l
+    m_Weight: 1
+  - m_Path: Armature/Origin/Pelvis/Spine/Chest/Shoulder.l/Arm.l/Wrist.l
+    m_Weight: 1
+  - m_Path: Armature/Origin/Pelvis/Spine/Chest/Shoulder.l/Arm.l/Wrist.l/IndexStart.l
+    m_Weight: 1
+  - m_Path: Armature/Origin/Pelvis/Spine/Chest/Shoulder.l/Arm.l/Wrist.l/IndexStart.l/IndexHalf.l
+    m_Weight: 1
+  - m_Path: Armature/Origin/Pelvis/Spine/Chest/Shoulder.l/Arm.l/Wrist.l/IndexStart.l/IndexHalf.l/IndexEnd.l
+    m_Weight: 1
+  - m_Path: Armature/Origin/Pelvis/Spine/Chest/Shoulder.l/Arm.l/Wrist.l/IndexStart.l/IndexHalf.l/IndexEnd.l/IndexEnd.l_end
+    m_Weight: 1
+  - m_Path: Armature/Origin/Pelvis/Spine/Chest/Shoulder.l/Arm.l/Wrist.l/MiddleStart.l
+    m_Weight: 1
+  - m_Path: Armature/Origin/Pelvis/Spine/Chest/Shoulder.l/Arm.l/Wrist.l/MiddleStart.l/MiddleHalf.l
+    m_Weight: 1
+  - m_Path: Armature/Origin/Pelvis/Spine/Chest/Shoulder.l/Arm.l/Wrist.l/MiddleStart.l/MiddleHalf.l/MiddleEnd.l
+    m_Weight: 1
+  - m_Path: Armature/Origin/Pelvis/Spine/Chest/Shoulder.l/Arm.l/Wrist.l/MiddleStart.l/MiddleHalf.l/MiddleEnd.l/MiddleEnd.l_end
+    m_Weight: 1
+  - m_Path: Armature/Origin/Pelvis/Spine/Chest/Shoulder.l/Arm.l/Wrist.l/PinkyStart.l
+    m_Weight: 1
+  - m_Path: Armature/Origin/Pelvis/Spine/Chest/Shoulder.l/Arm.l/Wrist.l/PinkyStart.l/PinkyHalf.l
+    m_Weight: 1
+  - m_Path: Armature/Origin/Pelvis/Spine/Chest/Shoulder.l/Arm.l/Wrist.l/PinkyStart.l/PinkyHalf.l/PinkyEnd.l
+    m_Weight: 1
+  - m_Path: Armature/Origin/Pelvis/Spine/Chest/Shoulder.l/Arm.l/Wrist.l/PinkyStart.l/PinkyHalf.l/PinkyEnd.l/PinkyEnd.l_end
+    m_Weight: 1
+  - m_Path: Armature/Origin/Pelvis/Spine/Chest/Shoulder.l/Arm.l/Wrist.l/ThumbStart.l
+    m_Weight: 1
+  - m_Path: Armature/Origin/Pelvis/Spine/Chest/Shoulder.l/Arm.l/Wrist.l/ThumbStart.l/ThumbHalf.l
+    m_Weight: 1
+  - m_Path: Armature/Origin/Pelvis/Spine/Chest/Shoulder.l/Arm.l/Wrist.l/ThumbStart.l/ThumbHalf.l/ThumbEnd.l
+    m_Weight: 1
+  - m_Path: Armature/Origin/Pelvis/Spine/Chest/Shoulder.l/Arm.l/Wrist.l/ThumbStart.l/ThumbHalf.l/ThumbEnd.l/ThumbEnd.l_end
+    m_Weight: 1
+  - m_Path: Armature/Origin/Pelvis/Spine/Chest/Shoulder.r
+    m_Weight: 1
+  - m_Path: Armature/Origin/Pelvis/Spine/Chest/Shoulder.r/Arm.r
+    m_Weight: 1
+  - m_Path: Armature/Origin/Pelvis/Spine/Chest/Shoulder.r/Arm.r/Wrist.r
+    m_Weight: 1
+  - m_Path: Armature/Origin/Pelvis/Spine/Chest/Shoulder.r/Arm.r/Wrist.r/IndexStart.r
+    m_Weight: 1
+  - m_Path: Armature/Origin/Pelvis/Spine/Chest/Shoulder.r/Arm.r/Wrist.r/IndexStart.r/IndexHalf.r
+    m_Weight: 1
+  - m_Path: Armature/Origin/Pelvis/Spine/Chest/Shoulder.r/Arm.r/Wrist.r/IndexStart.r/IndexHalf.r/IndexEnd.r
+    m_Weight: 1
+  - m_Path: Armature/Origin/Pelvis/Spine/Chest/Shoulder.r/Arm.r/Wrist.r/IndexStart.r/IndexHalf.r/IndexEnd.r/IndexEnd.r_end
+    m_Weight: 1
+  - m_Path: Armature/Origin/Pelvis/Spine/Chest/Shoulder.r/Arm.r/Wrist.r/MiddleStart.r
+    m_Weight: 1
+  - m_Path: Armature/Origin/Pelvis/Spine/Chest/Shoulder.r/Arm.r/Wrist.r/MiddleStart.r/MiddleHalf.r
+    m_Weight: 1
+  - m_Path: Armature/Origin/Pelvis/Spine/Chest/Shoulder.r/Arm.r/Wrist.r/MiddleStart.r/MiddleHalf.r/MiddleEnd.r
+    m_Weight: 1
+  - m_Path: Armature/Origin/Pelvis/Spine/Chest/Shoulder.r/Arm.r/Wrist.r/MiddleStart.r/MiddleHalf.r/MiddleEnd.r/MiddleEnd.r_end
+    m_Weight: 1
+  - m_Path: Armature/Origin/Pelvis/Spine/Chest/Shoulder.r/Arm.r/Wrist.r/PinkyStart.r
+    m_Weight: 1
+  - m_Path: Armature/Origin/Pelvis/Spine/Chest/Shoulder.r/Arm.r/Wrist.r/PinkyStart.r/PinkyHalf.r
+    m_Weight: 1
+  - m_Path: Armature/Origin/Pelvis/Spine/Chest/Shoulder.r/Arm.r/Wrist.r/PinkyStart.r/PinkyHalf.r/PinkyEnd.r
+    m_Weight: 1
+  - m_Path: Armature/Origin/Pelvis/Spine/Chest/Shoulder.r/Arm.r/Wrist.r/PinkyStart.r/PinkyHalf.r/PinkyEnd.r/PinkyEnd.r_end
+    m_Weight: 1
+  - m_Path: Armature/Origin/Pelvis/Spine/Chest/Shoulder.r/Arm.r/Wrist.r/ThumbStart.r
+    m_Weight: 1
+  - m_Path: Armature/Origin/Pelvis/Spine/Chest/Shoulder.r/Arm.r/Wrist.r/ThumbStart.r/ThumbHalf.r
+    m_Weight: 1
+  - m_Path: Armature/Origin/Pelvis/Spine/Chest/Shoulder.r/Arm.r/Wrist.r/ThumbStart.r/ThumbHalf.r/ThumbEnd.r
+    m_Weight: 1
+  - m_Path: Armature/Origin/Pelvis/Spine/Chest/Shoulder.r/Arm.r/Wrist.r/ThumbStart.r/ThumbHalf.r/ThumbEnd.r/ThumbEnd.r_end
+    m_Weight: 1
+  - m_Path: Armature/Origin/Pelvis/Spine/Chest/Shoulder.r/Arm.r/Wrist.r/WeaponRoot
+    m_Weight: 1
+  - m_Path: Armature/Origin/Pelvis/Spine/Chest/Shoulder.r/Arm.r/Wrist.r/WeaponRoot/WeaponRoot_end
+    m_Weight: 1
+  - m_Path: Cube.001
+    m_Weight: 0
+  - m_Path: Cube.002
+    m_Weight: 0
+  - m_Path: Cube.003
+    m_Weight: 0
+  - m_Path: Cube.006
+    m_Weight: 0
+  - m_Path: Cube.007
+    m_Weight: 0

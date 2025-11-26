@@ -124,6 +124,7 @@ public abstract class WeaponBehaviour : MonoBehaviour
         if (data.reload)
         {
             OnReload();
+            GetComponentInChildren<NetworkMecanimAnimator>().SetTrigger("Reload");
         }
 
         // 6. Lógica de Apuntado (Aiming)
