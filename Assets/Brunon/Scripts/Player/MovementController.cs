@@ -20,8 +20,6 @@ public class MovementController : NetworkBehaviour
     [Header("Crouch Walk Settings")]
     [SerializeField] private float _crouchSpeed; // velocidad lenta
     [SerializeField] private float _moveSmooth;
-    [Header("Animation")]
-    [SerializeField] private NetworkMecanimAnimator _netAnimator;
     [Header("Air Control")]
     [SerializeField] private float _airSteerStrength; // Fuerza del timón en el aire
 
@@ -87,7 +85,7 @@ public class MovementController : NetworkBehaviour
         Vector3 moveInputRaw = new Vector3(data.moveInput.x, 0f, data.moveInput.y).normalized;
 
         // 3. Actualizar Variables para el Animador
-        if (IsJumpingBool)
+        if (IsJumpingBool || IsCharging)
         {
             AnimInputX = 0f;
             AnimInputY = 0f;
@@ -95,13 +93,13 @@ public class MovementController : NetworkBehaviour
         }
         else
         {
-            AnimInputX = moveInputRaw.x;
-            AnimInputY = moveInputRaw.z;
-            
+            AnimInputX = Mathf.Round(moveInputRaw.x);
+            AnimInputY = Mathf.Round(moveInputRaw.z);
+
             // Calculamos velocidad real horizontal para el Blend Tree de brazos
-            float horizontalVel = new Vector3(_rb.velocity.x, 0, _rb.velocity.z).magnitude;
+            bool isMoving = moveInputRaw.magnitude > 0.1f;
             // Si hay input, mandamos velocidad, si no, 0 (para evitar deslizamiento visual)
-            NetworkMoveSpeed = moveInputRaw.magnitude > 0.1f ? horizontalVel : 0f;
+            NetworkMoveSpeed = isMoving ? 1f : 0f;
         }
 
         // Si no estamos en suelo ni pared, estamos saltando/cayendo
@@ -133,6 +131,7 @@ public class MovementController : NetworkBehaviour
                 ChargeTimer = Mathf.Clamp(ChargeTimer, 0f, _maxChargeTime);
                 LastInputDir = moveInputRaw;
                 LastJumpRawInput = LastInputDir;
+                HandleCameraChargeEffect();
             }
 
             if (IsCharging && moveInputRaw.magnitude == 0f)

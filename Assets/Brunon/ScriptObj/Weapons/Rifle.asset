@@ -22,7 +22,7 @@ MonoBehaviour:
   range: 60
   magazineSize: 30
   reserveAmmo: 90
-  reloadTime: 2
+  reloadTime: 1.5
   normalFOV: 85
-  aimFOV: 50
-  aimSpeed: 2
+  aimFOV: 60
+  aimSpeed: 10

@@ -55,7 +55,8 @@ public abstract class WeaponBehaviour : MonoBehaviour
     {
         if (isReloading || currentAmmo >= weaponData.magazineSize || reserveAmmo <= 0)
             yield break;
-
+        var animManager = GetComponentInParent<PlayerAnimatorManager>();
+        if (animManager != null) {animManager.SetTrigger("Reload");}
         isReloading = true;
         Debug.Log($"{weaponData.weaponName} recargando...");
 
@@ -124,7 +125,6 @@ public abstract class WeaponBehaviour : MonoBehaviour
         if (data.reload)
         {
             OnReload();
-            GetComponentInChildren<NetworkMecanimAnimator>().SetTrigger("Reload");
         }
 
         // 6. Lógica de Apuntado (Aiming)

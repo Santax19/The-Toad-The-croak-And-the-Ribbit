@@ -65,15 +65,15 @@ BlendTree:
     m_Motion: {fileID: 5698711898121474705, guid: 9a4fdefe137776640a7d276dca15d6ae, type: 3}
     m_Threshold: 0
     m_Position: {x: 0, y: 0}
-    m_TimeScale: 0.5
+    m_TimeScale: 0.8
     m_CycleOffset: 0
     m_DirectBlendParameter: InputX
     m_Mirror: 0
   m_BlendParameter: MoveSpeed
   m_BlendParameterY: InputX
   m_MinThreshold: 0
-  m_MaxThreshold: 0
-  m_UseAutomaticThresholds: 1
+  m_MaxThreshold: 1
+  m_UseAutomaticThresholds: 0
   m_NormalizedBlendValues: 0
   m_BlendType: 0
 --- !u!1101 &-5262410072012079973
