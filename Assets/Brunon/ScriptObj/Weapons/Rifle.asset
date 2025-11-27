@@ -25,4 +25,4 @@ MonoBehaviour:
   reloadTime: 1.5
   normalFOV: 85
   aimFOV: 60
-  aimSpeed: 10
+  aimSpeed: 15

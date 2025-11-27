@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Fusion;    
-public class PlayerVisuals : NetworkBehaviour
+public class CamOclussion : NetworkBehaviour
 {
     [Header("Referencias")]
     [Tooltip("La cámara principal del jugador")]

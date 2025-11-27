@@ -219,7 +219,7 @@ public class MovementController : NetworkBehaviour
     private void HandleAirSteering()
     {
         bool inAir = IsJumpingBool;
-        bool isGrappling = _grapple != null && (_grapple.IsGrappling() || _grapple.IsStuckToWall);
+        bool isGrappling = _grapple != null && (_grapple.IsGrapplingNet || _grapple.IsStuckToWall);
 
         // Solo aplicamos el timón si estamos en el aire y no estamos usando el gancho
         if (inAir && !isGrappling && !_isCrouching) // Añadí !_isCrouching por si acaso
