@@ -25,13 +25,11 @@ public class PlayerAnimatorManager : NetworkBehaviour
         if (_netAnimator != null && _netAnimator.Animator != null)
         {
             UpdateAnimator(_netAnimator.Animator, moveX, moveY, speed, isJumping, isCharging, isAiming);
-            Debug.Log("funciono 2");
         }
 
         if (Object.HasInputAuthority && _fpAnimator != null)
         {
             UpdateAnimator(_fpAnimator, moveX, moveY, speed, isJumping, isCharging, isAiming);
-            Debug.Log("funciono");
         }
     }
 
@@ -43,7 +41,6 @@ public class PlayerAnimatorManager : NetworkBehaviour
         anim.SetBool("IsJumping", jump);
         anim.SetBool("IsCharging", charge);
         anim.SetBool("IsAiming", aim);
-        Debug.Log("Actualizando Animator con " + speed + aim);
     }
     public void SetTrigger(string triggerName)
     {
