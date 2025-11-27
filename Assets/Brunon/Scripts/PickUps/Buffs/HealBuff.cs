@@ -9,7 +9,7 @@ public class HealBuff : BuffData
 
     public override void Apply(PlayerHealth health, MovementController movement, WeaponManager weaponManager)
     {
-        health.Heal(healAmount);
+        health.RPC_Heal(healAmount);
     }
 }
 

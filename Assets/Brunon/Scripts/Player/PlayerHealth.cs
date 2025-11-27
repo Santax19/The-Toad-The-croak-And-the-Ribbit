@@ -1,53 +1,115 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System;
+using Fusion;
 using UnityEngine;
 
-public class PlayerHealth : MonoBehaviour
+public class PlayerHealth : NetworkBehaviour
 {
     [Header("Health Settings")]
     [SerializeField] private int _maxHealth = 100;
-    private int _currentHealth;
-    public int CurrentHealth => _currentHealth;
-    public int MaxHealth => _maxHealth;
-    public bool IsDead => _currentHealth <= 0;
 
-    // Eventos locales -> f�ciles de convertir a eventos en red
-    public event Action<int, int> OnHealthChanged; // vida actual, m�xima
+    // ------- CAMPOS NETWORKED --------
+    [Networked,OnChangedRender(nameof(OnHealthChangedNetworked))]
+    public int CurrentHealth { get; set; }
+
+    [Networked]
+    public bool IsDead { get; set; }
+
+    public int MaxHealth => _maxHealth;
+
+    // ------- EVENTOS LOCALES --------
+    public event Action<int, int> OnHealthChanged;
     public event Action OnDeath;
 
-    private void Awake()
+
+    // --------------------------------------------------------------------
+    // INICIALIZACIÓN
+    // --------------------------------------------------------------------
+    public override void Spawned()
     {
-        _currentHealth = _maxHealth;
-        OnHealthChanged?.Invoke(_currentHealth, _maxHealth);
+        CurrentHealth = 100;
+
+        if (Object.HasStateAuthority)
+        {
+            CurrentHealth = _maxHealth;
+            IsDead = false;
+        }
+
+        // Actualiza UI inicial para este cliente local
+        if (Object.HasInputAuthority)
+            OnHealthChanged?.Invoke(CurrentHealth, _maxHealth);
     }
 
-    public void TakeDamage(int damage)
+
+    // --------------------------------------------------------------------
+    // MÉTODO PARA APLICAR DAÑO (RPC EN STATE AUTHORITY)
+    // --------------------------------------------------------------------
+    [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
+    public void RPC_TakeDamage(int damage, RpcInfo info = default)
     {
+        if (!Object.HasStateAuthority) return;
         if (IsDead) return;
-        _currentHealth -= damage;
-        _currentHealth = Mathf.Max(_currentHealth, 0);
 
-        OnHealthChanged?.Invoke(_currentHealth, _maxHealth);
+        // ► Validación básica
+        damage = Mathf.Clamp(damage, 0, 200);
+        Debug.Log("El jugador recibió daño");
+        CurrentHealth = Mathf.Max(0, CurrentHealth - damage);
 
-        if (_currentHealth == 0)
-            Die();
+        if (CurrentHealth <= 0)
+        {
+            IsDead = true;
+            HandleDeath();
+        }
     }
 
-    public void Heal(int amount)
+
+    // --------------------------------------------------------------------
+    // MÉTODO PARA HEAL (RPC)
+    // --------------------------------------------------------------------
+    [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
+    public void RPC_Heal(int amount, RpcInfo info = default)
     {
+        if (!Object.HasStateAuthority) return;
         if (IsDead) return;
 
-        _currentHealth += amount;
-        _currentHealth = Mathf.Min(_currentHealth, _maxHealth);
+        amount = Mathf.Clamp(amount, 0, 200);
 
-        OnHealthChanged?.Invoke(_currentHealth, _maxHealth);
+        CurrentHealth = Mathf.Min(CurrentHealth + amount, _maxHealth);
     }
 
-    private void Die()
+
+    // --------------------------------------------------------------------
+    // CALLBACK de cambio de Health sincronizado
+    // --------------------------------------------------------------------
+    private static void OnHealthChangedNetworked(PlayerHealth self)
+    {
+        
+        // UI local
+        if (self.Object.HasInputAuthority)
+        {
+            self.OnHealthChanged?.Invoke(self.CurrentHealth, self.MaxHealth);
+        }
+
+        // verificar muerte
+        if (self.CurrentHealth <= 0 && !self.IsDead)
+        {
+            self.IsDead = true;
+            self.HandleDeath();
+        }
+    }
+
+
+    // --------------------------------------------------------------------
+    // MANEJO DE MUERTE
+    // --------------------------------------------------------------------
+    private void HandleDeath()
     {
         Debug.Log($"{gameObject.name} ha muerto.");
+
+        // evento local para animaciones, desactivar controles, etc.
         OnDeath?.Invoke();
-        // ac� m�s adelante: respawn, desactivar player, animaciones, etc.
+
+        // Respawn lo maneja la StateAuthority desde afuera
+        // o podés poner lógica acá si querés.
     }
 }
+

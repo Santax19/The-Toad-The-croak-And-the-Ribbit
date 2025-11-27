@@ -6,7 +6,7 @@ public class DamageTrap : Trap
 {
     protected override void OnEnterTrap(PlayerHealth health, GameObject player)
     {
-        health.TakeDamage(_damage);
+        health.RPC_TakeDamage(_damage);
     }
 
     protected override void OnExitTrap(PlayerHealth health, GameObject player)

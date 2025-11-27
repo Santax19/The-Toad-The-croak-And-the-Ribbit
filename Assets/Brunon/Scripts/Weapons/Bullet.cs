@@ -11,6 +11,8 @@ public class Bullet : NetworkBehaviour
 
     private Rigidbody _rb;
     [Networked] private TickTimer _lifeTimer { get; set; }
+
+    public PlayerRef Owner;
     public override void Spawned()
     {
         _rb = GetComponent<Rigidbody>();
@@ -19,8 +21,9 @@ public class Bullet : NetworkBehaviour
         _lifeTimer = TickTimer.CreateFromSeconds(Runner, lifeTime);
     }
 
-    public void Initialize(Vector3 direction, float speed)
+    public void Initialize(Vector3 direction, float speed, PlayerRef owner)
     {
+        Owner = owner;
         _rb = GetComponent<Rigidbody>();
         _rb.velocity = direction * speed;
     }
@@ -35,16 +38,23 @@ public class Bullet : NetworkBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        // Si impacta contra algo con "EnemyHealth" (ejemplo)
-        EnemyHealth enemy = collision.collider.GetComponent<EnemyHealth>();
-        if (enemy != null)
+        if (!Object.HasStateAuthority) return;
+
+        PlayerHealth health = collision.collider.GetComponent<PlayerHealth>();
+
+        if(health != null)
         {
-            enemy.TakeDamage(damage);
+            if(health.Object.InputAuthority == Owner)
+            {
+                return;
+            }
+            health.RPC_TakeDamage(damage);
         }
 
-        if (Object != null && Object.IsValid)
+        if (Object.IsValid)
         {
             Runner.Despawn(Object);
         }
+
     }
 }

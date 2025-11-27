@@ -25,7 +25,7 @@ public class DOTTrap : Trap
         float elapsed = 0f;
         while (elapsed < _duration && health != null && !health.IsDead)
         {
-            health.TakeDamage(_damage);
+            health.RPC_TakeDamage(_damage);
             yield return new WaitForSeconds(_tickInterval);
             elapsed += _tickInterval;
         }
