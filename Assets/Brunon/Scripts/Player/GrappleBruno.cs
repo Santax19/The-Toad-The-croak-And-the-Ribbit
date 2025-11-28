@@ -17,7 +17,6 @@ public class GrappleBruno : NetworkBehaviour
     [SerializeField] private float _wallCheckDistance = 0.6f;
     [SerializeField] private float _grappleCooldown = 1f; // segundos de cooldown
     [SerializeField] private Vector3 _wallBoxSize = new(0.5f, 1f, 0.1f);
-    [SerializeField] private float _missDuration = 0.3f;
     [SerializeField] public float TongueFlySpeed = 65f;
     private float _dynamicRetractTime = 0f;
     private Rigidbody _rb;
