@@ -1,11 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Fusion;
 [CreateAssetMenu(fileName = "GrenadePickup_Nombre", menuName = "Buffs/Grenade Pickup")]
 public class GrenadePickupSO : BuffData
 {
     [Header("Configuración de Granada")]
-    [SerializeField] private GameObject grenadeWeaponPrefab; // El prefab del ARMA (la esfera que sostienes)
+    [SerializeField] private NetworkObject grenadeWeaponPrefab;
     [SerializeField] private int amountToAdd = 1;
     [SerializeField] private string grenadeWeaponName;
     [SerializeField] private int slotIndex = 3;

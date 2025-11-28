@@ -15,6 +15,7 @@ MonoBehaviour:
   buffName: HedgeHogGrenade
   pickupColor: {r: 0, g: 0, b: 0, a: 0}
   duration: 0
-  grenadeWeaponPrefab: {fileID: 8527667008393152735, guid: 137a0a3eda8513041ac6a790471314ef, type: 3}
+  grenadeWeaponPrefab: {fileID: 6789554742106250895, guid: 137a0a3eda8513041ac6a790471314ef, type: 3}
   amountToAdd: 1
   grenadeWeaponName: DMGGrenade
+  slotIndex: 3

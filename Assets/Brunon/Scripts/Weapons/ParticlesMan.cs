@@ -13,6 +13,7 @@ public class ParticlesMan : MonoBehaviour
         {
             if (ps == null) continue;
             ps.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
+            ps.time = 0;
             ps.Play(true);
         }
     }

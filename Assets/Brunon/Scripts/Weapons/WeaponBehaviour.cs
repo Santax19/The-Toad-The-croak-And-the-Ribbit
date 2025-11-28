@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Fusion;
 
-public abstract class WeaponBehaviour : MonoBehaviour
+public abstract class WeaponBehaviour : NetworkBehaviour
 {
     protected WeaponManager weaponManager;
 
@@ -15,7 +15,8 @@ public abstract class WeaponBehaviour : MonoBehaviour
     protected int reserveAmmo;
     protected bool isReloading;
     protected float nextShootTime = 0f;
-
+    private ChangeDetector _changes;
+    [Networked] private int FireVisualCounter { get; set; }
     public WeaponData WeaponData => weaponData;
     public int CurrentAmmo => currentAmmo;
     public int ReserveAmmo => reserveAmmo;
@@ -27,12 +28,32 @@ public abstract class WeaponBehaviour : MonoBehaviour
     }
 
     // Inicializamos los valores de munición (solo una vez al inicio)
-    protected virtual void Awake()
+    public override void Spawned()
     {
+        // Inicializamos datos locales
         currentAmmo = weaponData.magazineSize;
         reserveAmmo = weaponData.reserveAmmo;
+
+        // Inicializamos el detector de cambios
+        _changes = GetChangeDetector(ChangeDetector.Source.SimulationState);
     }
 
+    public override void Render()
+    {
+        // Detectamos si hubo cambios en las variables de red desde el último frame
+        foreach (var change in _changes.DetectChanges(this))
+        {
+            // Si el contador de disparos cambió...
+            if (change == nameof(FireVisualCounter))
+            {
+                // ...Ejecutamos las partículas visualmente
+                if (gunParticles != null)
+                {
+                    gunParticles.PlayShotParticles();
+                }
+            }
+        }
+    }
     public void CancelReload() => isReloading = false;
 
     // Métodos base
@@ -46,8 +67,7 @@ public abstract class WeaponBehaviour : MonoBehaviour
     }
     protected void PlayShotParticles()
     {
-        if (gunParticles != null)
-            gunParticles.PlayShotParticles();
+        FireVisualCounter++;
     }
 
 
@@ -58,7 +78,6 @@ public abstract class WeaponBehaviour : MonoBehaviour
         var animManager = GetComponentInParent<PlayerAnimatorManager>();
         if (animManager != null) {animManager.SetTrigger("Reload");}
         isReloading = true;
-        Debug.Log($"{weaponData.weaponName} recargando...");
 
         yield return new WaitForSeconds(weaponData.reloadTime);
 
@@ -69,7 +88,6 @@ public abstract class WeaponBehaviour : MonoBehaviour
         reserveAmmo -= bulletsToTake;
 
         isReloading = false;
-        Debug.Log($"{weaponData.weaponName}: recarga completa ({currentAmmo}/{reserveAmmo})");
         weaponManager.NotifyAmmoChanged();
     }
 
@@ -94,6 +112,7 @@ public abstract class WeaponBehaviour : MonoBehaviour
     }
     public virtual void HandleInput(NetworkRunner runner, NetworkInputData data, Camera playerCam, Transform firePoint)
     {
+        if (Object == null || !Object.IsValid) return;
         if (IsReloading) return;
 
         if (CurrentAmmo <= 0)
@@ -110,8 +129,9 @@ public abstract class WeaponBehaviour : MonoBehaviour
             if (TryConsumeAmmo(1))
             {
                 OnPrimaryFire(runner, playerCam, firePoint);
-                nextShootTime = Time.time + WeaponData.fireRate;
+                nextShootTime = Runner.SimulationTime + WeaponData.fireRate;
                 weaponManager.NotifyAmmoChanged();
+                PlayShotParticles();
             }
         }
 

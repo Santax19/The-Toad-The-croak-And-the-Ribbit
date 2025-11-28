@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 4569860853220147192}
   - component: {fileID: 3170869141101250203}
   - component: {fileID: 6611916054867780233}
+  - component: {fileID: -3136811563666196821}
   m_Layer: 0
   m_Name: PosionGrenade_WeaponPF
   m_TagString: Untagged
@@ -121,3 +122,22 @@ MonoBehaviour:
   weaponData: {fileID: 11400000, guid: 3e51ccd164e90ba429132f16962e790a, type: 2}
   gunParticles: {fileID: 0}
   thrownGrenadePrefab: {fileID: -4753943676711201356, guid: 1e85201ef16ad534a99063ce17451e67, type: 3}
+--- !u!114 &-3136811563666196821
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 271533925641999555}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1552182283, guid: e725a070cec140c4caffb81624c8c787, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SortKey: 310419530
+  ObjectInterest: 1
+  Flags: 262145
+  NestedObjects: []
+  NetworkedBehaviours:
+  - {fileID: 6611916054867780233}
+  ForceRemoteRenderTimeframe: 0

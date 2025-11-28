@@ -106,7 +106,7 @@ public class WeaponManager : NetworkBehaviour
         if (currentWeapon == null) return;
         OnAmmoChanged?.Invoke(currentWeapon.CurrentAmmo, currentWeapon.ReserveAmmo);
     }
-    public WeaponBehaviour AddWeaponToSlot(GameObject weaponPrefab, int slotIndex)
+    public WeaponBehaviour AddWeaponToSlot(NetworkObject weaponPrefab, int slotIndex)
     {
         if (weaponPrefab == null) return null;
 
@@ -120,22 +120,27 @@ public class WeaponManager : NetworkBehaviour
         // 1. Si ya tenemos un arma en ese slot (ej. una granada vieja), la destruimos
         if (ownedWeapons[slotIndex] != null)
         {
-            Destroy(ownedWeapons[slotIndex].gameObject);
+            Runner.Despawn(ownedWeapons[slotIndex].Object);
         }
 
         // 2. Creamos la instancia del arma
         // --- ARREGLO DE JERARQUÍA: Ahora es hijo de 'firePoint' ---
-        GameObject weaponGO = Instantiate(weaponPrefab, firePoint); // <-- HIJO DE firePoint
-        weaponGO.transform.localPosition = Vector3.zero;
-        weaponGO.transform.localRotation = Quaternion.identity;
+        NetworkObject weaponNO = Runner.Spawn(
+            weaponPrefab,
+            Vector3.zero,
+            Quaternion.identity,
+            Object.InputAuthority // Importante: Le damos autoridad al dueño de este WeaponManager
+        ); // <-- HIJO DE firePoint
+        weaponNO.transform.SetParent(firePoint, false);
 
-        WeaponBehaviour newWeapon = weaponGO.GetComponent<WeaponBehaviour>();
-        if (newWeapon != null)
+        // Ajustes locales de posición (para que no quede flotando raro)
+        weaponNO.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
+        if (weaponNO.TryGetComponent<WeaponBehaviour>(out var newWeapon))
         {
-            // 3. La asignamos al slot correcto en la lista
             ownedWeapons[slotIndex] = newWeapon;
+            // Si quieres ocultarla inicialmente:
+            newWeapon.gameObject.SetActive(false);
 
-            newWeapon.gameObject.SetActive(false); // La desactivamos por defecto
             return newWeapon;
         }
         return null;

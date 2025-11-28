@@ -80,20 +80,21 @@ public class PlayerHealth : NetworkBehaviour
     // --------------------------------------------------------------------
     // CALLBACK de cambio de Health sincronizado
     // --------------------------------------------------------------------
-    private static void OnHealthChangedNetworked(PlayerHealth self)
+    public void OnHealthChangedNetworked()
     {
-        
+
         // UI local
-        if (self.Object.HasInputAuthority)
+        if (Object.HasInputAuthority)
         {
-            self.OnHealthChanged?.Invoke(self.CurrentHealth, self.MaxHealth);
+            // Usamos CurrentHealth y MaxHealth directamente
+            OnHealthChanged?.Invoke(CurrentHealth, MaxHealth);
         }
 
         // verificar muerte
-        if (self.CurrentHealth <= 0 && !self.IsDead)
+        if (CurrentHealth <= 0 && !IsDead)
         {
-            self.IsDead = true;
-            self.HandleDeath();
+            IsDead = true;
+            HandleDeath();
         }
     }
 

@@ -8,7 +8,7 @@ public abstract class BaseThrownGrenade : NetworkBehaviour
 {
     [Header("Configuración Base")]
     [SerializeField] protected float explosionRadius = 5f; // Radio para el efecto
-    [SerializeField] protected GameObject activationEffect; // Tu prefab de partículas/luz
+    [SerializeField] protected ParticlesMan _particlesManager; // Tu prefab de partículas/luz
     public void Initialize(NetworkRunner runner, float timeToExplode)
     {
         StartCoroutine(ActivationTimer(runner, Mathf.Max(0.01f, timeToExplode)));
@@ -28,21 +28,32 @@ public abstract class BaseThrownGrenade : NetworkBehaviour
 
     protected virtual void Explode(NetworkRunner runner, Collision collision)
     {
-        // ¡Le pasamos el runner a ActivateEffect!
         ActivateEffect(runner, collision);
 
-        if (activationEffect != null)
+        // 2. LÓGICA DE VISUALES (BURST)
+        if (_particlesManager != null)
         {
-            GameObject effect = Instantiate(activationEffect, transform.position, Quaternion.identity);
-            Destroy(effect, 2f);
+            // A. "Salvamos" las partículas separándolas de la granada
+            // Si no hacemos esto, al despawnear la granada, las partículas mueren instantáneamente.
+            _particlesManager.transform.SetParent(null);
+
+            // B. Reproducimos la explosión
+            _particlesManager.PlayShotParticles();
+
+            // C. Programamos que el objeto de partículas se borre solo (localmente) en 3 segundos
+            // Como ya no es hijo de un objeto de red, usamos Destroy normal.
+            Destroy(_particlesManager.gameObject, 3f);
         }
 
-        // --- ¡MODIFICADO! ---
-        // Usamos Despawn para destruir objetos de red
-        if (Object != null) // Chequeo de seguridad
+        // 3. Despawnear la granada física
+        if (Object != null)
+        {
             runner.Despawn(Object);
+        }
         else
+        {
             Destroy(gameObject);
+        }
         // --- FIN MODIFICADO ---
     }
 

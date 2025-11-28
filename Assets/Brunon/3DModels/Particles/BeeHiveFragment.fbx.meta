@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 62936186dcb94d64fa3c6df56def3c85
+guid: 473d3c2be3e4b5d4791613f296e73524
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
@@ -7,10 +7,10 @@ ModelImporter:
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
-      name: SegmentedGranate
-    second: {fileID: 2100000, guid: 806693a701ec3064f86ff8401e487d2f, type: 2}
+      name: Material
+    second: {fileID: 2100000, guid: f072eb598d61e6e4c8bfcafd537227aa, type: 2}
   materials:
-    materialImportMode: 1
+    materialImportMode: 2
     materialName: 0
     materialSearch: 1
     materialLocation: 1
@@ -40,7 +40,7 @@ ModelImporter:
     isReadable: 0
   meshes:
     lODScreenPercentages: []
-    globalScale: 2.5
+    globalScale: 2.39
     meshCompression: 0
     addColliders: 0
     useSRGBMaterialColor: 1
@@ -95,7 +95,7 @@ ModelImporter:
     armStretch: 0.05
     legStretch: 0.05
     feetSpacing: 0
-    globalScale: 0.024999999
+    globalScale: 0.0239
     rootMotionBoneName: 
     hasTranslationDoF: 0
     hasExtraRoot: 0

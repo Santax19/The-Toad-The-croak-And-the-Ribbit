@@ -10,8 +10,8 @@ public class PlayerHudController : MonoBehaviour
     [SerializeField] private Image _crosshair; // Imagen simple para la mira
     [SerializeField] private TMP_Text _ammoText;
 
-    private PlayerHealth _healthSystem;
-    private WeaponManager _weaponManager;
+    [SerializeField] private PlayerHealth _healthSystem;
+    [SerializeField] private WeaponManager _weaponManager;
 
     public void Init(PlayerHealth healthSystem)
     {

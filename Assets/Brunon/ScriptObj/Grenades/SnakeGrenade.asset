@@ -15,7 +15,7 @@ MonoBehaviour:
   buffName: HedgeHogGrenade
   pickupColor: {r: 0, g: 0, b: 0, a: 0}
   duration: 0
-  grenadeWeaponPrefab: {fileID: 271533925641999555, guid: 50193702f74579a4d8db4ddcff71907b, type: 3}
+  grenadeWeaponPrefab: {fileID: -3136811563666196821, guid: 50193702f74579a4d8db4ddcff71907b, type: 3}
   amountToAdd: 1
   grenadeWeaponName: PoisonGrenade
   slotIndex: 3

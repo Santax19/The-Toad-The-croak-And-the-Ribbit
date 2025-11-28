@@ -7,13 +7,13 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Slow
-  m_Shader: {fileID: -6465566751694194690, guid: 07af25769008a954bb016472ed1a98ec, type: 3}
+  m_Name: SegmentedGranade
+  m_Shader: {fileID: -6465566751694194690, guid: 72040719caff4704597d2366a8dd89f7, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
   m_InvalidKeywords: []
-  m_LightmapFlags: 4
+  m_LightmapFlags: 2
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: -1
@@ -23,16 +23,12 @@ Material:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
-    - _Bees:
-        m_Texture: {fileID: 2800000, guid: e65918c3b36e1894cae0b7848c1960c2, type: 3}
+    - _MainText:
+        m_Texture: {fileID: 2800000, guid: dd5476b625513be46b439957d9eb211a, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
-    - _SampleTexture2D_0493874644924ffe9fd019970afdec56_Texture_1_Texture2D:
-        m_Texture: {fileID: 2800000, guid: 956e1cbb59f155c4a8dd886c87dd8701, type: 3}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _SampleTexture2D_9eb256e89cd84cf4ab84309e21367aeb_Texture_1_Texture2D:
-        m_Texture: {fileID: 2800000, guid: 750029804469ab94d989e225f87eeac4, type: 3}
+    - _Mask:
+        m_Texture: {fileID: 2800000, guid: 9eecfb6614d6ef140852ef5adc8230ce, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - unity_Lightmaps:
@@ -49,15 +45,23 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _Active: 1
-    - _BeeFlap: 0.5
-    - _BeeSpeed: 1.18
-    - _DropsCount: 1.77
-    - _VignetteIntensity: 20.07
-    - _VignettePower: 4.22
-    - _VoronoiScale: 5.86
+    - _CookTime: 0
+    - _IsActive: 0
+    - _QueueControl: 0
+    - _QueueOffset: 0
     m_Colors:
-    - _Color: {r: 0.7264151, g: 0.3904696, b: 0, a: 0}
-    - _DropsColor: {r: 0.7169812, g: 0.5872176, b: 0.08387322, a: 0}
-    - _NoiseSpeed: {r: 0.02, g: 0.05, b: 0, a: 0}
+    - _CookColor: {r: 0.8301887, g: 0.32424346, b: 0.32424346, a: 0}
   m_BuildTextureStacks: []
+--- !u!114 &5772395138343323522
+MonoBehaviour:
+  m_ObjectHideFlags: 11
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0353a89b1f911e48b9e16bdc9f2e058, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  version: 7

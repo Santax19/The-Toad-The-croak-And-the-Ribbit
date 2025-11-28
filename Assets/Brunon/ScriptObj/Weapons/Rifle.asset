@@ -17,12 +17,12 @@ MonoBehaviour:
   weaponPrefab: {fileID: 0}
   damage: 10
   headDamage: 15
-  fireRate: 0.1
+  fireRate: 3.4
   bulletSpeed: 200
   range: 60
   magazineSize: 30
   reserveAmmo: 90
-  reloadTime: 1.5
+  reloadTime: 2.5
   normalFOV: 85
   aimFOV: 60
   aimSpeed: 15
