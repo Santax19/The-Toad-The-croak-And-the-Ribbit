@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 3678698968867649688}
   - component: {fileID: 4546327989750980691}
   - component: {fileID: 288846011248113506}
-  - component: {fileID: 8593099166477343149}
   m_Layer: 8
   m_Name: PomeGrenade
   m_TagString: Untagged
@@ -56,7 +55,7 @@ MeshRenderer:
   m_RenderingLayerMask: 257
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 25054901beef1c045b7b648da3d652ed, type: 2}
+  - {fileID: 2100000, guid: 370a5ee379e6436489e67c567ecf5973, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -112,19 +111,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _buff: {fileID: 11400000, guid: c38bab74403c3c644897ba4ef4742ad9, type: 2}
---- !u!114 &8593099166477343149
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2708930360997516770}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ae8143c19c53e99498b010e81f9bf961, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  outlineMat: {fileID: 2100000, guid: 0c4679cea533f1a48bbe1df2991a07a7, type: 2}
 --- !u!1001 &6582953590217641381
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -189,6 +175,10 @@ PrefabInstance:
       propertyPath: m_ConstrainProportionsScale
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: eaf59595bddf73742afa9ae3025c417c, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 694daf9a69ae2ae4f8fdef990ede25bd, type: 2}
     - target: {fileID: 919132149155446097, guid: eaf59595bddf73742afa9ae3025c417c, type: 3}
       propertyPath: m_Name
       value: WholeGranate
