@@ -40,17 +40,20 @@ public class Bullet : NetworkBehaviour
     {
         if (!Object.HasStateAuthority) return;
 
-        PlayerHealth health = collision.collider.GetComponent<PlayerHealth>();
 
-        if(health != null)
+        var health = collision.collider.GetComponentInParent<PlayerHealth>();
+
+        if (health != null)
         {
-            if(health.Object.InputAuthority == Owner)
+            // Evitar fuego amigo / suicidio
+            if (health.Object.InputAuthority == Owner)
             {
                 return;
             }
             health.RPC_TakeDamage(damage);
         }
 
+        // Destruir bala si es válida
         if (Object.IsValid)
         {
             Runner.Despawn(Object);

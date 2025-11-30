@@ -17,6 +17,7 @@ public abstract class WeaponBehaviour : NetworkBehaviour
     protected float nextShootTime = 0f;
     private ChangeDetector _changes;
     [Networked] private int FireVisualCounter { get; set; }
+    [Networked] protected TickTimer FireCooldown { get; set; }
     public WeaponData WeaponData => weaponData;
     public int CurrentAmmo => currentAmmo;
     public int ReserveAmmo => reserveAmmo;
@@ -124,12 +125,15 @@ public abstract class WeaponBehaviour : NetworkBehaviour
 
         // 3. Lógica de Disparo (Fire1)
         // --- Usa data.fire1 ---
-        if (data.fire1 && Time.time >= nextShootTime) // Time.time está OK aquí
+        if (data.fire1 && FireCooldown.ExpiredOrNotRunning(Runner))
         {
             if (TryConsumeAmmo(1))
             {
                 OnPrimaryFire(runner, playerCam, firePoint);
-                nextShootTime = Runner.SimulationTime + WeaponData.fireRate;
+
+                // Configurar el nuevo tiempo de espera usando el Runner
+                FireCooldown = TickTimer.CreateFromSeconds(Runner, WeaponData.fireRate);
+
                 weaponManager.NotifyAmmoChanged();
                 PlayShotParticles();
             }

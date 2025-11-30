@@ -12,12 +12,12 @@ public class GrappleBruno : NetworkBehaviour
     [SerializeField] private LayerMask _pickupMask;
 
     [Header("Ajustes del Grapple")]
-    [SerializeField] private float _grappleRange = 14f;   // distancia máxima
-    [SerializeField] private float _pullSpeed = 20f;      // velocidad de arrastre  
-    [SerializeField] private float _wallCheckDistance = 0.6f;
-    [SerializeField] private float _grappleCooldown = 1f; // segundos de cooldown
+    [SerializeField] private float _grappleRange;   // distancia máxima
+    [SerializeField] private float _pullSpeed;      // velocidad de arrastre  
+    [SerializeField] private float _wallCheckDistance;
+    [SerializeField] private float _grappleCooldown; // segundos de cooldown
     [SerializeField] private Vector3 _wallBoxSize = new(0.5f, 1f, 0.1f);
-    [SerializeField] public float TongueFlySpeed = 65f;
+    [SerializeField] public float TongueFlySpeed;
     private float _dynamicRetractTime = 0f;
     private Rigidbody _rb;
     private Vector3 _grapplePoint;

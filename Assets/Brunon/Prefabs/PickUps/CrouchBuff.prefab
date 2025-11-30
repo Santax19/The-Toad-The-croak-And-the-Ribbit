@@ -13,7 +13,6 @@ GameObject:
   - component: {fileID: 8758960125978154806}
   - component: {fileID: 6587489323631794260}
   - component: {fileID: 3012338672420321406}
-  - component: {fileID: 1053237588166061434}
   m_Layer: 8
   m_Name: CrouchBuff
   m_TagString: Untagged
@@ -120,16 +119,3 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _buff: {fileID: 11400000, guid: ca2e081a95cbe884480acf8d8f5c5529, type: 2}
---- !u!114 &1053237588166061434
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2883542845904595445}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ae8143c19c53e99498b010e81f9bf961, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  outlineMat: {fileID: 2100000, guid: 0c4679cea533f1a48bbe1df2991a07a7, type: 2}
