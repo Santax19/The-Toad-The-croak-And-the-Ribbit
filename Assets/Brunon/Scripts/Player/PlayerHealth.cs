@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class PlayerHealth : NetworkBehaviour
 {
+    [SerializeField] private PlayerAnimatorManager _animatorManager;
     [Header("Health Settings")]
     [SerializeField] private int _maxHealth = 100;
 
@@ -33,7 +34,6 @@ public class PlayerHealth : NetworkBehaviour
             CurrentHealth = _maxHealth;
             IsDead = false;
         }
-
         // Actualiza UI inicial para este cliente local
         if (Object.HasInputAuthority)
             OnHealthChanged?.Invoke(CurrentHealth, _maxHealth);
@@ -52,16 +52,30 @@ public class PlayerHealth : NetworkBehaviour
         // ► Validación básica
         damage = Mathf.Clamp(damage, 0, 200);
         Debug.Log("El jugador recibió daño");
-        CurrentHealth = Mathf.Max(0, CurrentHealth - damage);
-
+        int previousHealth = CurrentHealth;
+        CurrentHealth = Mathf.Max(0, CurrentHealth - damage);    
+        if (CurrentHealth < previousHealth)
+        {
+            RPC_PlayDamageEffect();
+        }
         if (CurrentHealth <= 0)
         {
             IsDead = true;
-            HandleDeath();
+            HandleDeath(); // Lógica local del server
+            RPC_PlayDeathEffect(); // Orden visual a todos
         }
     }
 
-
+    [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
+    public void RPC_PlayDamageEffect()
+    {
+        // Esto se ejecuta en la máquina de TODOS los jugadores instantáneamente
+        // al recibir el mensaje, sin esperar a interpolación de variables.
+        if (_animatorManager != null)
+        {
+            _animatorManager.TriggerDamageVisuals();
+        }
+    }
     // --------------------------------------------------------------------
     // MÉTODO PARA HEAL (RPC)
     // --------------------------------------------------------------------
@@ -75,26 +89,20 @@ public class PlayerHealth : NetworkBehaviour
 
         CurrentHealth = Mathf.Min(CurrentHealth + amount, _maxHealth);
     }
-
+    [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
+    public void RPC_PlayDeathEffect()
+    {
+        if (_animatorManager != null) _animatorManager.TriggerDissolve();
+    }
 
     // --------------------------------------------------------------------
     // CALLBACK de cambio de Health sincronizado
     // --------------------------------------------------------------------
     public void OnHealthChangedNetworked()
     {
-
-        // UI local
         if (Object.HasInputAuthority)
         {
-            // Usamos CurrentHealth y MaxHealth directamente
             OnHealthChanged?.Invoke(CurrentHealth, MaxHealth);
-        }
-
-        // verificar muerte
-        if (CurrentHealth <= 0 && !IsDead)
-        {
-            IsDead = true;
-            HandleDeath();
         }
     }
 
@@ -108,9 +116,6 @@ public class PlayerHealth : NetworkBehaviour
 
         // evento local para animaciones, desactivar controles, etc.
         OnDeath?.Invoke();
-
-        // Respawn lo maneja la StateAuthority desde afuera
-        // o podés poner lógica acá si querés.
     }
 }
 

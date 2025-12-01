@@ -17,7 +17,7 @@ MonoBehaviour:
   weaponPrefab: {fileID: 0}
   damage: 10
   headDamage: 15
-  fireRate: 3.4
+  fireRate: 0.09
   bulletSpeed: 200
   range: 60
   magazineSize: 30
