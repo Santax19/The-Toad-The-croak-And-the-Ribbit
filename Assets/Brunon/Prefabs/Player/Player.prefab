@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2727558929331234767}
   - component: {fileID: 8950305267575106962}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: TongeRange
   m_TagString: Tongue
   m_Icon: {fileID: 0}
@@ -15156,7 +15156,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _maxChargeTime: 0.8
-  _maxForce: 14
+  _maxForce: 10
   _minForce: 2
   _verticalBoost: 4
   _jumpCooldown: 0.3
@@ -15329,6 +15329,9 @@ MonoBehaviour:
   - {fileID: 81948865467953036}
   - {fileID: 6787826238346656336}
   _shaderDamageBool: _IsActive
+  _shaderDissolveBool: _IsDissolving
+  _shaderDissolveFloat: _DissolveAmount
+  _dissolveDuration: 1.5
 --- !u!114 &3835557747975020270
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -20840,7 +20843,7 @@ GameObject:
   - component: {fileID: 6777330566105347043}
   - component: {fileID: 973845976363469361}
   - component: {fileID: 6686368517971992636}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: FloorDetector
   m_TagString: Untagged
   m_Icon: {fileID: 0}

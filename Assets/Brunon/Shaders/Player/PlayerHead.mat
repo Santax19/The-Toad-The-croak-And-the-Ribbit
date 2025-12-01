@@ -54,14 +54,20 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
+    - _DissolveAmount: 1
     - _Distancia: 0
+    - _EdgeThick: 0
     - _FallOff: 0
     - _FresnelPower: 1
     - _IsActive: 0
+    - _IsDissolving: 1
+    - _NoiseScale: 42.44
+    - _PannerSpeed: 0.8
     - _QueueControl: 0
     - _QueueOffset: 0
     - _Sine: 10
     m_Colors:
-    - _BaseColor: {r: 0.4433962, g: 0, b: 0, a: 1}
-    - _ColorFresnel: {r: 0.6132076, g: 0, b: 0.11691766, a: 0}
+    - _BaseColor: {r: 0.735849, g: 0, b: 0, a: 1}
+    - _ColorBordesDissolve: {r: 0.1106858, g: 0.1587326, b: 0.8584906, a: 0}
+    - _ColorFresnel: {r: 0.9056604, g: 0.046137344, b: 0.21143004, a: 0}
   m_BuildTextureStacks: []

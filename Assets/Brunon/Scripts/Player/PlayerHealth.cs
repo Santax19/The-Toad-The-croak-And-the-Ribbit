@@ -61,7 +61,8 @@ public class PlayerHealth : NetworkBehaviour
         if (CurrentHealth <= 0)
         {
             IsDead = true;
-            HandleDeath();
+            HandleDeath(); // Lógica local del server
+            RPC_PlayDeathEffect(); // Orden visual a todos
         }
     }
 
@@ -88,7 +89,11 @@ public class PlayerHealth : NetworkBehaviour
 
         CurrentHealth = Mathf.Min(CurrentHealth + amount, _maxHealth);
     }
-
+    [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
+    public void RPC_PlayDeathEffect()
+    {
+        if (_animatorManager != null) _animatorManager.TriggerDissolve();
+    }
 
     // --------------------------------------------------------------------
     // CALLBACK de cambio de Health sincronizado
@@ -98,13 +103,6 @@ public class PlayerHealth : NetworkBehaviour
         if (Object.HasInputAuthority)
         {
             OnHealthChanged?.Invoke(CurrentHealth, MaxHealth);
-        }
-
-        // Verificar muerte (Backup por seguridad)
-        if (CurrentHealth <= 0 && !IsDead)
-        {
-            IsDead = true;
-            HandleDeath();
         }
     }
 
@@ -118,9 +116,6 @@ public class PlayerHealth : NetworkBehaviour
 
         // evento local para animaciones, desactivar controles, etc.
         OnDeath?.Invoke();
-
-        // Respawn lo maneja la StateAuthority desde afuera
-        // o podés poner lógica acá si querés.
     }
 }
 
