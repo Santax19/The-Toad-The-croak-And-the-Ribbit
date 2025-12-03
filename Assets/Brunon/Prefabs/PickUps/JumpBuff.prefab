@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 8840489106151330596}
   - component: {fileID: 1095831983467989125}
   - component: {fileID: 1378879631039532191}
+  - component: {fileID: -7794747841376895882}
   m_Layer: 8
   m_Name: JumpBuff
   m_TagString: Untagged
@@ -110,6 +111,25 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _buff: {fileID: 11400000, guid: 9c6cbb4923a17814182cc357210f540d, type: 2}
+--- !u!114 &-7794747841376895882
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3489056847564031895}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1552182283, guid: e725a070cec140c4caffb81624c8c787, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SortKey: 1476164801
+  ObjectInterest: 1
+  Flags: 262145
+  NestedObjects: []
+  NetworkedBehaviours:
+  - {fileID: 1378879631039532191}
+  ForceRemoteRenderTimeframe: 0
 --- !u!1001 &2730353022879773288
 PrefabInstance:
   m_ObjectHideFlags: 0

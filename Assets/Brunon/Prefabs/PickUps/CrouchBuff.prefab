@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 1889338634984076899}
   - component: {fileID: 6587489323631794260}
   - component: {fileID: 3012338672420321406}
+  - component: {fileID: -6997880811056339225}
   m_Layer: 8
   m_Name: CrouchBuff
   m_TagString: Untagged
@@ -68,6 +69,25 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _buff: {fileID: 11400000, guid: ca2e081a95cbe884480acf8d8f5c5529, type: 2}
+--- !u!114 &-6997880811056339225
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2883542845904595445}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1552182283, guid: e725a070cec140c4caffb81624c8c787, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SortKey: 456440093
+  ObjectInterest: 1
+  Flags: 262145
+  NestedObjects: []
+  NetworkedBehaviours:
+  - {fileID: 3012338672420321406}
+  ForceRemoteRenderTimeframe: 0
 --- !u!1001 &192819353461376852
 PrefabInstance:
   m_ObjectHideFlags: 0
