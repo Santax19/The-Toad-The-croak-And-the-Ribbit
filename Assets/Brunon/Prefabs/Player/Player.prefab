@@ -15156,12 +15156,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _maxChargeTime: 0.8
-  _maxForce: 10
-  _minForce: 2
-  _verticalBoost: 4
+  _maxForce: 15
+  _minForce: 3
+  _verticalBoost: 4.5
   _jumpCooldown: 0.3
-  _cameraDropAmount: 1.5
-  _cameraLerpSpeed: 3.3
+  _cameraDropAmount: 2.2
+  _cameraLerpSpeed: 5
   _chargeCurve:
     serializedVersion: 2
     m_Curve:
@@ -15213,7 +15213,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _animatorManager: {fileID: 9204957394694942694}
+  _netRigidbody: {fileID: 977555741072462697}
+  _spawnPoints: []
   _maxHealth: 100
+  _respawnTime: 1.3
   _CurrentHealth: 0
   _IsDead: 0
 --- !u!114 &1724521021808484473
@@ -15297,7 +15300,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _stateAuthorityChangeErrorCorrectionDelta: 0
   SyncScale: 0
-  SyncParent: 1
+  SyncParent: 0
   _interpolationTarget: {fileID: 8945952620134211804}
   UsePreciseRotation: 0
   UseRenderSleepThresholds: 1
