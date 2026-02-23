@@ -7,7 +7,7 @@ public class GrenadeBehaviour : WeaponBehaviour
 {
     [Header("Lógica de Granada")]
     [SerializeField] private NetworkObject thrownGrenadePrefab; // El prefab que se LANZA
-
+    [Networked] private NetworkButtons _prevButtons { get; set; }
     [Networked] protected NetworkBool IsActive { get; set; } = false;
     [Networked] protected float CookStartTime { get; set; } = 0;
 
@@ -34,13 +34,13 @@ public class GrenadeBehaviour : WeaponBehaviour
     public override void HandleInput(NetworkRunner runner, NetworkInputData data, Camera playerCam, Transform firePoint)
     {
         if (Object == null || !Object.IsValid) return;
-        if (data.fire1)
+        if (data.buttons.IsSet(MyButtons.Fire2))
         {
-            Debug.Log($"INPUT DETECTADO | Fire1: {data.fire1} | WasPressed: {_wasFire1Pressed} | IsActive: {IsActive} | Ammo: {currentAmmo}");
+            Debug.Log($"INPUT DETECTADO | Fire1: {data.buttons.IsSet(MyButtons.Fire2)} | WasPressed: {_wasFire1Pressed} | IsActive: {IsActive} | Ammo: {currentAmmo}");
         }
         // Detectamos los eventos "Down" y "Up" desde el estado de red
-        bool fire1Pressed = data.fire1 && !_wasFire1Pressed;
-        bool fire1Released = !data.fire1 && _wasFire1Pressed;
+        bool fire1Pressed = data.buttons.WasPressed(_prevButtons, MyButtons.Fire1);
+        bool fire1Released = data.buttons.WasReleased(_prevButtons, MyButtons.Fire1);
 
         // 1. Iniciar "cocinado" (LMB Presionado)
         if (fire1Pressed && !IsActive && currentAmmo > 0)
@@ -78,11 +78,12 @@ public class GrenadeBehaviour : WeaponBehaviour
         }
 
         // 5. Actualizamos el estado "anterior" de fire1
-        _wasFire1Pressed = data.fire1;
+        _wasFire1Pressed = data.buttons.IsSet(MyButtons.Fire2);
     }
 
     private void ThrowGrenade(NetworkRunner runner, Camera playerCam, Transform firePoint)
     {
+        if (!runner.IsServer) return;
         Debug.Log("Lanzando granada");
 
         // --- ¡ARREGLO! Usa 'runner' (minúscula) ---

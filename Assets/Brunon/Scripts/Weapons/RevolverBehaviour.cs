@@ -8,6 +8,7 @@ public class RevolverBehaviour : WeaponBehaviour
     [SerializeField] private NetworkObject bulletPrefab;
     [SerializeField] private float burstDelay = 0.1f;
     private bool _wasFire2Pressed = false;
+    [Networked] private NetworkButtons _prevButtons { get; set; }
     public override void OnPrimaryFire(NetworkRunner runner, Camera cam, Transform firePoint)
     {
         Ray ray = cam.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
@@ -16,11 +17,10 @@ public class RevolverBehaviour : WeaponBehaviour
             targetPoint = hit.point;
 
         Vector3 dir = (targetPoint - firePoint.position).normalized;
-        NetworkObject bullet = runner.Spawn(
-            bulletPrefab,
-            firePoint.position,
-            Quaternion.LookRotation(dir)
-        );
+        if (runner.IsServer)
+        {
+            runner.Spawn(bulletPrefab, firePoint.position, firePoint.rotation, Object.InputAuthority);
+        }
         PlayShotParticles();
     }
 
@@ -66,7 +66,7 @@ public class RevolverBehaviour : WeaponBehaviour
         }
 
         // 1. Disparo (lee de 'data')
-        if (data.fire1 && Time.time >= nextShootTime)
+        if (data.buttons.WasPressed(_prevButtons, MyButtons.Fire1) && Time.time >= nextShootTime)
         {
             if (TryConsumeAmmo(1))
             {
@@ -77,19 +77,19 @@ public class RevolverBehaviour : WeaponBehaviour
         }
 
         // 2. Ráfaga (detecta el "click" desde 'data')
-        bool fire2Down = data.fire2 && !_wasFire2Pressed;
+        bool fire2Down = data.buttons.WasPressed(_prevButtons, MyButtons.Fire2) && !_wasFire2Pressed;
         if (fire2Down && Time.time >= nextShootTime)
         {
             OnSecondaryFire(playerCam, firePoint);
         }
 
         // 3. Recarga (lee de 'data')
-        if (data.reload)
+        if (data.buttons.WasPressed(_prevButtons, MyButtons.Fire1))
         {
             OnReload();
         }
 
         // 4. Actualizamos el estado "anterior" de fire2
-        _wasFire2Pressed = data.fire2;
+        _wasFire2Pressed = data.buttons.WasPressed(_prevButtons, MyButtons.Fire2);
     }
 }
