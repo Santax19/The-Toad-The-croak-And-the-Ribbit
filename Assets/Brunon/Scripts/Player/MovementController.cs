@@ -16,7 +16,6 @@ public class MovementController : NetworkBehaviour
     [SerializeField] private float _cameraLerpSpeed = 5f;
     [SerializeField] private AnimationCurve _chargeCurve;
     [SerializeField] private Transform _headTransform;
-    [SerializeField] private float _rotationSpeed = 80f;
 
     [Header("Crouch Walk Settings")]
     [SerializeField] private float _crouchSpeed; // velocidad lenta
@@ -29,7 +28,6 @@ public class MovementController : NetworkBehaviour
     private FloorDetector _floorDetector;
     private GrappleBruno _grapple;
     private WeaponManager _weaponManager;
-    private CameraController _camController;
 
     [Networked] private float JumpLaunchTime { get; set; }
     [Networked] public float ChargeTimer { get; set; } = 0f;
@@ -41,7 +39,7 @@ public class MovementController : NetworkBehaviour
     [Networked] public float AnimInputY { get; set; }
     // Sincronizamos si está en el aire
     [Networked] public NetworkBool IsJumpingBool { get; set; }
-    [Networked] private float _currentYRotation { get; set; }
+
 
     // --- Variables Locales
     private Vector3 _headDefaultLocalPos;
@@ -56,29 +54,25 @@ public class MovementController : NetworkBehaviour
         // Awake() se convierte en la parte de arriba de Spawned()
         _rb = GetComponent<Rigidbody>();
         _grapple = GetComponent<GrappleBruno>(); // Lo adaptaremos después
-        _playerCam = GetComponentInChildren<Camera>();
+        _playerCam = GetComponentInChildren<Camera>(); // Ojo: CameraController ya la maneja
         _floorDetector = GetComponentInChildren<FloorDetector>();
         _weaponManager = GetComponent<WeaponManager>();
-        _camController = GetComponent<CameraController>();
         _baseCrouchSpeed = _crouchSpeed;
         _baseMaxForce = _maxForce;
         if (_headTransform != null)
             _headDefaultLocalPos = _headTransform.localPosition;
+
+        // IMPORTANTE: Desactivamos la interpolación de Rigidbody para
+        // que el NetworkRigidbody (que añadiremos) tome el control.
         _rb.interpolation = RigidbodyInterpolation.None;
     }
 
     public override void FixedUpdateNetwork()
     {
+        // Solo el jugador con autoridad de input puede ejecutar esto
+        // El estado (posición, _isCharging) se sincronizará a los demás
         if (!GetInput(out NetworkInputData data)) return;
-        if(data.mouseX != 0)
-        {
-            // Acumulamos el input en una variable de estado
-            _currentYRotation += data.mouseX * _rotationSpeed * Runner.DeltaTime;
-            // Creamos la rotación final
-            Quaternion targetRotation = Quaternion.Euler(0, _currentYRotation, 0);
-            // Aplicamos rotación absoluta al Rigidbody
-            _rb.MoveRotation(targetRotation);
-        }
+        
         if (_weaponManager != null)
             _weaponManager.NetworkedWeaponUpdate(data);
 
@@ -110,7 +104,7 @@ public class MovementController : NetworkBehaviour
 
         // Si no estamos en suelo ni pared, estamos saltando/cayendo
         IsJumpingBool = !groundedOrWall || isTakingOff;
-        bool wantsToCrouch = data.buttons.IsSet(MyButtons.Crouch);
+        bool wantsToCrouch = data.crouch;
         bool canJump = groundedOrWall && Runner.SimulationTime > _lastJumpTime + _jumpCooldown;
 
         if (groundedOrWall) { LastJumpRawInput = Vector3.zero; }

@@ -18,7 +18,6 @@ public abstract class WeaponBehaviour : NetworkBehaviour
     private ChangeDetector _changes;
     [Networked] private int FireVisualCounter { get; set; }
     [Networked] protected TickTimer FireCooldown { get; set; }
-    [Networked] private NetworkButtons _prevButtons { get; set; }
     public WeaponData WeaponData => weaponData;
     public int CurrentAmmo => currentAmmo;
     public int ReserveAmmo => reserveAmmo;
@@ -126,7 +125,7 @@ public abstract class WeaponBehaviour : NetworkBehaviour
 
         // 3. Lógica de Disparo (Fire1)
         // --- Usa data.fire1 ---
-        if (data.buttons.IsSet(MyButtons.Fire1) && FireCooldown.ExpiredOrNotRunning(Runner))
+        if (data.fire1 && FireCooldown.ExpiredOrNotRunning(Runner))
         {
             if (TryConsumeAmmo(1))
             {
@@ -141,19 +140,19 @@ public abstract class WeaponBehaviour : NetworkBehaviour
         }
 
         // 4. Lógica de Acción Secundaria (Fire2)
-        if (data.buttons.IsSet(MyButtons.Fire2))
+        if (data.fire2)
         {
             OnSecondaryFire(playerCam, firePoint);
         }
 
         // 5. Lógica de Recarga Manual (R)
-        if (data.buttons.WasPressed(_prevButtons, MyButtons.Reload))
+        if (data.reload)
         {
             OnReload();
         }
 
         // 6. Lógica de Apuntado (Aiming)
-        float targetFOV = data.buttons.IsSet(MyButtons.Fire2) ? weaponData.aimFOV : weaponData.normalFOV;
+        float targetFOV = data.fire2 ? weaponData.aimFOV : weaponData.normalFOV;
         playerCam.fieldOfView = Mathf.Lerp(
             playerCam.fieldOfView,
             targetFOV,

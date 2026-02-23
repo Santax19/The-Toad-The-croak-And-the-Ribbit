@@ -18,7 +18,6 @@ public class WeaponManager : NetworkBehaviour
 
     public event Action<int, int> OnAmmoChanged;
     [Networked] public NetworkBool IsAiming { get; set; }
-    [Networked] private NetworkButtons _prevButtons { get; set; }
     public override void Spawned()
     {
         // Esta es la nueva "Start()"
@@ -43,14 +42,13 @@ public class WeaponManager : NetworkBehaviour
         if (currentWeapon == null) return;
         if (Object.HasInputAuthority)
         {
-            IsAiming = data.buttons.IsSet(MyButtons.Fire2);
+            IsAiming = data.fire2;
         }
         // Pasamos los datos de red al arma actual
         currentWeapon.HandleInput(Runner, data, playerCam, firePoint);
 
         // Leemos los datos de switch de arma
         HandleWeaponSwitch(data);
-        _prevButtons = data.buttons;
     }
 
 
@@ -70,10 +68,10 @@ public class WeaponManager : NetworkBehaviour
 
     private void HandleWeaponSwitch(NetworkInputData data)
     {
-        if (data.buttons.WasPressed(_prevButtons, MyButtons.Alpha1)) EquipWeapon(0);
-        if (data.buttons.WasPressed(_prevButtons, MyButtons.Alpha2)) EquipWeapon(1);
-        if (data.buttons.WasPressed(_prevButtons, MyButtons.Alpha3)) EquipWeapon(2);
-        if (data.buttons.WasPressed(_prevButtons, MyButtons.Alpha4)) EquipWeapon(3);
+        if (data.alpha1) EquipWeapon(0);
+        if (data.alpha2) EquipWeapon(1);
+        if (data.alpha3) EquipWeapon(2);
+        if (data.alpha4) EquipWeapon(3);
     }
 
     public void EquipWeapon(int index)

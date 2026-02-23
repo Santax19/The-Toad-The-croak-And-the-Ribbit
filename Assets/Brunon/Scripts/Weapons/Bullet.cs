@@ -17,7 +17,7 @@ public class Bullet : NetworkBehaviour
     {
         _rb = GetComponent<Rigidbody>();
         _rb.velocity = transform.forward * speed;
-
+        // destrucción automática en red
         _lifeTimer = TickTimer.CreateFromSeconds(Runner, lifeTime);
     }
 
@@ -36,13 +36,12 @@ public class Bullet : NetworkBehaviour
         }
     }
 
-    private void OnTriggerEnter(Collider other)
+    private void OnCollisionEnter(Collision collision)
     {
-        // Solo el servidor (StateAuthority) decide si hay daño
         if (!Object.HasStateAuthority) return;
 
-        // Buscamos la salud en el objeto golpeado o sus padres
-        var health = other.GetComponentInParent<PlayerHealth>();
+
+        var health = collision.collider.GetComponentInParent<PlayerHealth>();
 
         if (health != null)
         {
@@ -54,10 +53,11 @@ public class Bullet : NetworkBehaviour
             health.RPC_TakeDamage(damage);
         }
 
-        // Destruir bala al tocar cualquier cosa (menos al dueño)
+        // Destruir bala si es válida
         if (Object.IsValid)
         {
             Runner.Despawn(Object);
         }
+
     }
 }

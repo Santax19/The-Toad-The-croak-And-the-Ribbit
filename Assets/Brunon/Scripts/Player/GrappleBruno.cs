@@ -28,7 +28,6 @@ public class GrappleBruno : NetworkBehaviour
     [Networked] public NetworkBool IsLatchedNet { get; set; }
     [Networked] public Vector3 GrapplePointNet { get; set; }
     [Networked] public NetworkBool IsStuckToWallNet { get; set; }
-    [Networked] private NetworkButtons _prevButtons { get; set; }
     public bool IsGrappling => IsGrapplingNet;
     public bool IsStuckToWall => IsStuckToWallNet;
     public Vector3 CurrentGrapplePoint => GrapplePointNet;
@@ -59,9 +58,8 @@ public class GrappleBruno : NetworkBehaviour
         }
         if (GetInput(out NetworkInputData data))
         {
-            bool grapplePressed = data.buttons.IsSet(MyButtons.Grapple);
             // Detectar el inicio del disparo
-            if (grapplePressed && !IsGrapplingNet && !IsStuckToWallNet)
+            if (data.grapple && !IsGrapplingNet && !IsStuckToWallNet)
             {
                 if (Runner.SimulationTime >= _lastGrappleTime + _grappleCooldown)
                 {
@@ -69,11 +67,10 @@ public class GrappleBruno : NetworkBehaviour
                 }
             }
             // Cancelar manualmente
-            if (!grapplePressed && (IsGrapplingNet || IsStuckToWallNet))
+            if (!data.grapple && (IsGrapplingNet || IsStuckToWallNet))
             {
                 ReleaseGrapple();
             }
-            _prevButtons = data.buttons;
         }
     }
 
@@ -82,14 +79,8 @@ public class GrappleBruno : NetworkBehaviour
         _lastGrappleTime = Runner.SimulationTime;
         IsGrapplingNet = true;
         IsLatchedNet = false;
-        Vector3 origin = transform.position + Vector3.up * 2.2f; ; // Posición de ojos
-        Vector3 direction = transform.forward;
-        if (GetInput(out NetworkInputData data))
-        {
-            direction = data.aimDirection; // Usamos la dirección que envió el cliente
-        }
+        Ray ray = _cam.ScreenPointToRay(Input.mousePosition);
 
-        Ray ray = new Ray(origin, direction);
         // 1. Primero chequeamos pickups
         if (Physics.Raycast(ray, out RaycastHit hitPickup, _grappleRange, _pickupMask))
         {

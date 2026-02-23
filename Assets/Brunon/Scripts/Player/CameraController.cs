@@ -12,7 +12,6 @@ public class CameraController : NetworkBehaviour
     private float _xRotation = 0f; // control de inclinación vertical
     [SerializeField] private Transform _tongueDetector;
     private Camera _cameraComponent;
-    public float MouseXInput { get; private set; }
 
     public override void Spawned()
     {
@@ -42,15 +41,20 @@ public class CameraController : NetworkBehaviour
 
     private void Update()
     {
-        if(Object == null || !Object.HasInputAuthority) return;
-
+        if (Object == null) {return;}
+        if (!Object.HasInputAuthority)
+            return;
+        // input del mouse
+        float mouseX = Input.GetAxis("Mouse X") * _sensitivity * Time.deltaTime;
         float mouseY = Input.GetAxis("Mouse Y") * _sensitivity * Time.deltaTime;
 
-        // Rotación Vertical (Local, Visual) - ESTO SE QUEDA AQUÍ
+        // rotación vertical (cámara local)
         _xRotation -= mouseY;
         _xRotation = Mathf.Clamp(_xRotation, -80f, 80f);
 
-        if (_cameraTransform) _cameraTransform.localRotation = Quaternion.Euler(_xRotation, 0f, 0f);
-        if (_tongueDetector) _tongueDetector.localRotation = Quaternion.Euler(_xRotation, 0f, 0f);
+        // Aplicamos la rotación vertical SÓLO al transform de la CÁMARA
+        _cameraTransform.localRotation = Quaternion.Euler(_xRotation, 0f, 0f);
+        if (_tongueDetector != null) {_tongueDetector.localRotation = Quaternion.Euler(_xRotation, 0f, 0f);}
+        transform.Rotate(Vector3.up * mouseX);
     }
 }
