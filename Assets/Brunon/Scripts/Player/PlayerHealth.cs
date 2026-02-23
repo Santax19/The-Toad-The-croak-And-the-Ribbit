@@ -1,16 +1,12 @@
-﻿using Fusion;
-using Fusion.Addons.Physics;
-using System;
+﻿using System;
+using Fusion;
 using UnityEngine;
 
 public class PlayerHealth : NetworkBehaviour
 {
     [SerializeField] private PlayerAnimatorManager _animatorManager;
-    [SerializeField] private NetworkRigidbody3D _netRigidbody;
-    [SerializeField] private Transform[] _spawnPoints;
     [Header("Health Settings")]
     [SerializeField] private int _maxHealth = 100;
-    [SerializeField] private float _respawnTime = 1.3f;
 
     // ------- CAMPOS NETWORKED --------
     [Networked,OnChangedRender(nameof(OnHealthChangedNetworked))]
@@ -18,12 +14,13 @@ public class PlayerHealth : NetworkBehaviour
 
     [Networked]
     public bool IsDead { get; set; }
-    [Networked] private TickTimer _respawnTimer { get; set; }
+
     public int MaxHealth => _maxHealth;
 
     // ------- EVENTOS LOCALES --------
     public event Action<int, int> OnHealthChanged;
     public event Action OnDeath;
+
 
     // --------------------------------------------------------------------
     // INICIALIZACIÓN
@@ -31,8 +28,7 @@ public class PlayerHealth : NetworkBehaviour
     public override void Spawned()
     {
         CurrentHealth = 100;
-        GameObject spawnRoot = GameObject.Find("SpawnPoint");
-        if (spawnRoot) _spawnPoints = spawnRoot.GetComponentsInChildren<Transform>();
+
         if (Object.HasStateAuthority)
         {
             CurrentHealth = _maxHealth;
@@ -42,24 +38,8 @@ public class PlayerHealth : NetworkBehaviour
         if (Object.HasInputAuthority)
             OnHealthChanged?.Invoke(CurrentHealth, _maxHealth);
     }
-    public override void FixedUpdateNetwork()
-    {
-        // Lógica de Respawn (Solo el dueño en Shared)
-        if (Object.HasStateAuthority)
-        {
-            if (IsDead && _respawnTimer.Expired(Runner))
-            {
-                Respawn();
-            }
-        }
-    }
-    private void Die()
-    {
-        IsDead = true;
 
-        _respawnTimer = TickTimer.CreateFromSeconds(Runner, _respawnTime);
-        RPC_PlayDeathEffect();
-    }
+
     // --------------------------------------------------------------------
     // MÉTODO PARA APLICAR DAÑO (RPC EN STATE AUTHORITY)
     // --------------------------------------------------------------------
@@ -80,7 +60,9 @@ public class PlayerHealth : NetworkBehaviour
         }
         if (CurrentHealth <= 0)
         {
-            Die();
+            IsDead = true;
+            HandleDeath(); // Lógica local del server
+            RPC_PlayDeathEffect(); // Orden visual a todos
         }
     }
 
@@ -124,57 +106,16 @@ public class PlayerHealth : NetworkBehaviour
         }
     }
 
-    private void Respawn()
+
+    // --------------------------------------------------------------------
+    // MANEJO DE MUERTE
+    // --------------------------------------------------------------------
+    private void HandleDeath()
     {
-        Debug.Log("Reviviendo...");
+        Debug.Log($"{gameObject.name} ha muerto.");
 
-        // 1. Resetear Estado
-        IsDead = false;
-        CurrentHealth = _maxHealth;
-        _respawnTimer = default;
-        _animatorManager.RestoreDissolve();
-        Vector3 respawnPos = Vector3.up * 2;
-        // 2. Teletransportar
-        if (_spawnPoints != null && _spawnPoints.Length > 0)
-        {
-            // Usamos Length en lugar de Length > 1 para evitar errores si solo hay 1
-            int index = UnityEngine.Random.Range(0, _spawnPoints.Length);
-            if (_spawnPoints[index] != null)
-                respawnPos = _spawnPoints[index].position;
-        }
-        if (_netRigidbody != null)
-        {
-            try
-            {
-                _netRigidbody.Teleport(respawnPos);
-            }
-            catch (Exception e)
-            {
-                Debug.LogWarning($"Fallo Teleport seguro: {e.Message}. Usando Transform directo.");
-                // Fallback para Shared Mode (Funciona porque somos StateAuthority)
-                transform.position = respawnPos;
-                if (TryGetComponent<Rigidbody>(out var rb)) rb.velocity = Vector3.zero;
-            }
-        }
-        else
-        {
-            // Si no hay NetworkRB, movemos el transform (Fallback)
-            transform.position = respawnPos;
-        }
-
-        // 3. Restaurar Armas (Munición)
-        // Buscamos el WeaponManager en este mismo objeto
-        if (TryGetComponent<WeaponManager>(out var weaponManager))
-        {
-            // Recargar todas las armas al máximo
-            foreach (var weapon in weaponManager.ownedWeapons)
-            {
-                if (weapon != null)
-                    weapon.RefillAmmo(weapon.WeaponData.magazineSize, weapon.WeaponData.reserveAmmo);
-            }
-            weaponManager.NotifyAmmoChanged();
-        }
-        OnHealthChangedNetworked();
+        // evento local para animaciones, desactivar controles, etc.
+        OnDeath?.Invoke();
     }
 }
 

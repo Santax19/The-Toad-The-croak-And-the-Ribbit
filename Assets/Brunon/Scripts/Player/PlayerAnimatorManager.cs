@@ -97,11 +97,6 @@ public class PlayerAnimatorManager : NetworkBehaviour
 
         _dissolveCoroutine = StartCoroutine(DissolveRoutine());
     }
-    public void RestoreDissolve()
-    {
-        if (_bodyPartsRenderer == null || _bodyPartsRenderer.Length == 0) return;
-        SetShaderFloatGlobal(_shaderDissolveFloat, 1f);
-    }
     private IEnumerator DissolveRoutine()
     {
         float currentTime = 0f;

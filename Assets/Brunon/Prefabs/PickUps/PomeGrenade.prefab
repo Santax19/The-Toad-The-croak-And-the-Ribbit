@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 3678698968867649688}
   - component: {fileID: 4546327989750980691}
   - component: {fileID: 288846011248113506}
-  - component: {fileID: 7402840224651971897}
   m_Layer: 8
   m_Name: PomeGrenade
   m_TagString: Untagged
@@ -112,25 +111,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _buff: {fileID: 11400000, guid: c38bab74403c3c644897ba4ef4742ad9, type: 2}
---- !u!114 &7402840224651971897
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2708930360997516770}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: -1552182283, guid: e725a070cec140c4caffb81624c8c787, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  SortKey: 2273945240
-  ObjectInterest: 1
-  Flags: 786433
-  NestedObjects: []
-  NetworkedBehaviours:
-  - {fileID: 288846011248113506}
-  ForceRemoteRenderTimeframe: 0
 --- !u!1001 &6582953590217641381
 PrefabInstance:
   m_ObjectHideFlags: 0
